@@ -33,6 +33,6 @@ for website_path in departments:
         resultObj[classCode.text] = {"Title": classTitle.text, "Units": classUnits.text, "Description": classDesc.text.split('\n')[-1]}
 
     driver.quit()
-    file_path = website_path + "_scraping_results.json"
+    file_path = 'class-scrapper/' + website_path + "_scraping_results.json"
     with open(file_path, 'w') as file:
         json.dump(resultObj, file)
