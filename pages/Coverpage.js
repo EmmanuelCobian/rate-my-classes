@@ -1,28 +1,22 @@
-import { useSession, signIn, signOut } from "next-auth/react"
-import styles from '@/styles/Login.module.css'
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import styles from "@/styles/Coverpage.module.css";
 
-export default function Login() {
-  const { data: session, status } = useSession()
-  const userEmail = session?.user?.email
-
-  if (status === "loading") {
-    return <p>Hang on there...</p>
-  }
-
-  if (status === "authenticated") {
-    return (
-      <div>
-        <p>Signed in as {userEmail}</p>
-        <button onClick={() => signOut()}>Sign out</button>
-        <img src="https://cdn.pixabay.com/photo/2017/08/11/19/36/vw-2632486_1280.png" />
-      </div>
-    )
-  }
-
+export default function CoverNav() {
   return (
-    <div className={styles.signInContainer}>
-      <p>Please sign in to review classes!</p>
-      <button onClick={() => signIn("github")} className={styles.signInBtn}>Sign in</button>
-    </div>
-  )
+    <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="#home">RateMyClasses</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link href="#home"><b3>Home</b3></Nav.Link>
+            <Nav.Link href="#link">Link</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
