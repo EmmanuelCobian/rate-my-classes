@@ -1,0 +1,19 @@
+.ratingContainer {
+    
+}
+
+.container {
+    display: flex;
+}
+
+.container p {
+    color: black;
+}
+
+.ratingContainer {
+    margin-right: 10px;
+}
+
+.container {
+    text-align: center;
+}
