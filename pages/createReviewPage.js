@@ -1,22 +1,20 @@
-import ClassInfoContainer from "@/components/ClassInfoContainer";
 import CoverNav from "@/components/Coverpage";
 import styled from "styled-components";
+import React, { useState } from "react";
 
+// #region CSS
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 2rem 2rem;
+  margin: auto;
+  width: 600px;
+  padding: 10px;
 `;
 
 const Title = styled.h1`
   font-weight: bold;
   font-size: 2rem;
-`;
-
-const Question = styled.p`
-  font-weight: bold;
-  font-size: 1.5rem;
 `;
 
 const Row = styled.div`
@@ -27,133 +25,144 @@ const Row = styled.div`
 `;
 
 const Form = styled.form`
-  width: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 `;
 
-const Button = styled.button``;
+const QuestionAndAnswer = styled.p`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+// #endregion
+
+const gradeOptions = ["Select grade", "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"]
+const termOptions = ["Select term", "Fall 2023", "Spring 2023", "Fall 2022", "Spring 2022", "Fall 2021", "Spring 2021", "Fall 2020", "Spring 2020", "Fall 2019", "Spring 2019", "Fall 2018", "Spring 2018", "Fall 2017", "Spring 2017", "Fall 2016", "Spring 2016", "Fall 2015", "Spring 2015"]
 
 export default function CreateReviewPage() {
+   // State to manage form inputs
+   const [formData, setFormData] = useState({
+    professor: "",
+    term: "",
+    grade: "",
+    mandatoryAttendance: null,
+    mandatoryTextBook: null,
+    difficulty: "0",
+    interest: "0",
+    description: "",
+  });
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+  };
+
+  const renderRadioQuestion = (label, name) => {
+    return (<QuestionAndAnswer>
+      <label>{label}</label>
+      <Row>
+        <div class="form-check form-check-inline">
+          <input
+            checked={formData[name] === 'yes'}
+            class="form-check-input"
+            name={name}
+            onChange={handleInputChange}
+            type="radio"
+            value="yes"
+          />
+          <label class="form-check-label">
+            Yes
+          </label>
+        </div>
+        
+        <div class="form-check form-check-inline">
+          <input
+            checked={formData[name] === 'no'}
+            class="form-check-input"
+            name={name}
+            onChange={handleInputChange}
+            type="radio"
+            value="no"
+          />
+          <label class="form-check-label">
+            No
+          </label>
+        </div>
+      </Row>
+      </QuestionAndAnswer>);
+  }
+
+  const renderDropDown = (label, name, options) => {
+    return(
+      <QuestionAndAnswer>
+        <label>{label}</label>
+          <div class="form-group">
+            <select class="form-control" name={name} value={formData[name]} onChange={handleInputChange}>
+              {options.map(o => {
+                return (<option>{o}</option>);
+              })}
+            </select>
+          </div>
+      </QuestionAndAnswer>
+    )
+  }
+
+  const renderSlider = (label, name) => {
+    return (
+      <QuestionAndAnswer>
+        <label class="form-label">{label + ": " + formData[name]}</label>
+        <input type="range" class="form-range" value={formData[name]} min="0" max="5" name={name} onChange={handleInputChange}/>
+      </QuestionAndAnswer>
+    )
+  }
+
+  const renderInputField = (label, name, placeHolder, numRows) => {
+    return (
+      <QuestionAndAnswer>
+        <label>{label}</label>
+        <textarea
+          class="form-control"
+          rows={numRows}
+          value={formData[name]}
+          name={name}
+          onChange={handleInputChange}
+          placeholder={placeHolder}
+        ></textarea>
+      </QuestionAndAnswer>
+    )
+  }
+
   return (
     <>
       <CoverNav />
       <PageContainer>
         <Title>Review for CS 61B</Title>
+        <br></br>
+        <Form onSubmit={handleSubmit}>
+          {renderInputField("Professor", "professor", "Enter your professor's name", 1)}
+          {renderDropDown("Term", "term", termOptions)}
+          {renderDropDown("Grade", "grade", gradeOptions)}
 
-        <Form>
-          <label for="exampleInputPassword1">Attendance mandatory</label>
-          <Row>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio1"
-                value="option1"
-              />
-              <label class="form-check-label" for="inlineRadio1">
-                Yes
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio2"
-                value="option2"
-              />
-              <label class="form-check-label" for="inlineRadio2">
-                No
-              </label>
-            </div>
-          </Row>
+          {renderRadioQuestion("Attendance mandatory", "mandatoryAttendance")}
+          {renderRadioQuestion("Text book mandatory", "mandatoryTextBook")}
+          
+          {renderSlider("Course difficulty", "difficulty")}
+          {renderSlider("Interest level", "interest")}
 
-          <label for="exampleInputPassword1">Lecture mandatory</label>
-          <Row>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio1"
-                value="option1"
-              />
-              <label class="form-check-label" for="inlineRadio1">
-                Yes
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio2"
-                value="option2"
-              />
-              <label class="form-check-label" for="inlineRadio2">
-                No
-              </label>
-            </div>
-          </Row>
+          {renderInputField("Description", "description", "Write your review for this course", 4)}
 
-          <label for="exampleInputPassword1">Time conflict allowed</label>
-          <Row>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio1"
-                value="option1"
-              />
-              <label class="form-check-label" for="inlineRadio1">
-                Yes
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio2"
-                value="option2"
-              />
-              <label class="form-check-label" for="inlineRadio2">
-                No
-              </label>
-            </div>
-          </Row>
-          <div class="form-group">
-            <label for="exampleFormControlSelect1">Grade</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option>A+</option>
-              <option>A</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B</option>
-              <option>B-</option>
-              <option>C+</option>
-              <option>C</option>
-              <option>C-</option>
-              <option>D+</option>
-              <option>D</option>
-              <option>D-</option>
-              <option>F+</option>
-              <option>F</option>
-              <option>F-</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Description</label>
-            <textarea
-              class="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-            ></textarea>
-          </div>
           <button type="submit" class="btn btn-primary">
             Submit
           </button>
