@@ -8,12 +8,13 @@ import ClassPage from "./classpage";
 import stylings from "@/styles/ClassPage.module.css";
 import Ratings from "@/components/Ratings.js";
 import ClassInfoContainer from "@/components/ClassInfoContainer";
+import { Button } from "react-bootstrap";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const CenterTextContainer = styled.div`
-  width: 800px;
-  height: 3000px;
+  width: 600px;
+  height: 1000px;
   padding: 20px;
   border-radius: 10px;
   background-color: black;
@@ -27,17 +28,30 @@ const CenterTextContainer = styled.div`
 const CenterTextContainerContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 `;
+
+const search = styled.input``;
 
 export default function Home() {
   return (
     <div>
       <CoverNav />
-      <Image className='coverPhoto' src="/classroom.jpg" alt="classroom" width={1000} height={1000} />
+      <Image
+        className="coverPhoto"
+        src="/classroom.jpg"
+        alt="classroom"
+        width={1000}
+        height={1000}
+      />
       <CenterTextContainerContainer>
         <CenterTextContainer>
-          <h1 className="CenterText">FIND MY CLASS Bah bala ahaha</h1>
+          <h1 className="CenterText">FIND MY CLASS</h1>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search by name, professor, class id..."
+          ></input>
         </CenterTextContainer>
       </CenterTextContainerContainer>
       <img />
