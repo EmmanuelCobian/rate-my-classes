@@ -5,20 +5,14 @@ const app = express();
 
 app.use(cors());
 
-const csClassInfo = "../class-scrapper/compsci_scraping_results.json";
-
-const jsonData = fs.readFileSync(csClassInfo, "utf-8");
-const data = JSON.parse(jsonData);
 const sqlite3 = require("sqlite3").verbose();
-
 let db = new sqlite3.Database("database.db", (err) => {
   if (err) {
     return console.error(err.message);
   }
-  console.log("connected to the in-memory database for cs classes");
+  console.log("connected to the in-memory database");
 });
 
-const tableName = "compsci";
 const columns = [
   "CourseCode TEXT",
   "Title TEXT",
@@ -28,19 +22,51 @@ const columns = [
   "Prerequisites TEXT",
 ];
 
-db.run(`CREATE TABLE IF NOT EXISTS ${tableName} (${columns.join(
-    ", "
-  )})`, (err) => {
-    if (err) {
-        return console.error(err.message)
-    }
-    console.log('Created compsci table')
-  });
+db.run(`CREATE TABLE IF NOT EXISTS compsci (${columns.join(", ")})`, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Created compsci table");
+});
 
-app.post('/pop-compsci', (req, res) => {
-    const insertQuery = `INSERT INTO ${tableName} VALUES (?, ?, ?, ?, ?, ?)`;
+db.run(`CREATE TABLE IF NOT EXISTS math (${columns.join(", ")})`, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Created math table");
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS eecs (${columns.join(", ")})`, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Created eecs table");
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS physics (${columns.join(", ")})`, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Created physics table");
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS data (${columns.join(", ")})`, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Created data table");
+});
+
+app.post("/populate-compsci", (req, res) => {
+  const csClassInfo = "../class-scrapper/compsci_scraping_results.json";
+
+  const jsonData = fs.readFileSync(csClassInfo, "utf-8");
+  const data = JSON.parse(jsonData);
+  const insertQuery = `INSERT INTO compsci VALUES (?, ?, ?, ?, ?, ?)`;
+
+  db.serialize(() => {
     const stmt = db.prepare(insertQuery);
-    
+
     Object.entries(data).forEach(([courseCode, courseData]) => {
       const {
         Title,
@@ -49,28 +75,275 @@ app.post('/pop-compsci', (req, res) => {
         "Average Grade": AverageGrade,
         Prerequisites,
       } = courseData;
-    
-      stmt.run(courseCode, Title, Units, Description, AverageGrade, Prerequisites);
+      stmt.run(
+        courseCode,
+        Title,
+        Units,
+        Description,
+        AverageGrade,
+        Prerequisites
+      );
     });
-    
-    stmt.finalize((err) => {
-        if (err) {
-            return res.status(500).json({ error: err.message })
-        }
-        return res.json({ success: 'compsci table populated'})
-    });
-})
 
-app.get("/compsci", (req, res) => {
-  const sql = "SELECT * FROM compsci";
-  db.get(sql, (err, row) => {
+    stmt.finalize((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      return res.json({ success: "compsci table populated" });
+    });
+  });
+});
+
+app.post("/populate-data", (req, res) => {
+  const dataClassInfo = "../class-scrapper/data_scraping_results.json";
+
+  const jsonData = fs.readFileSync(dataClassInfo, "utf-8");
+  const data = JSON.parse(jsonData);
+  const insertQuery = `INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)`;
+
+  db.serialize(() => {
+    const stmt = db.prepare(insertQuery);
+
+    Object.entries(data).forEach(([courseCode, courseData]) => {
+      const {
+        Title,
+        Units,
+        Description,
+        "Average Grade": AverageGrade,
+        Prerequisites,
+      } = courseData;
+      stmt.run(
+        courseCode,
+        Title,
+        Units,
+        Description,
+        AverageGrade,
+        Prerequisites
+      );
+    });
+
+    stmt.finalize((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      return res.json({ success: "data table populated" });
+    });
+  });
+});
+
+app.post("/populate-eecs", (req, res) => {
+  const eecsClassInfo = "../class-scrapper/eecs_scraping_results.json";
+
+  const jsonData = fs.readFileSync(eecsClassInfo, "utf-8");
+  const data = JSON.parse(jsonData);
+  const insertQuery = `INSERT INTO eecs VALUES (?, ?, ?, ?, ?, ?)`;
+
+  db.serialize(() => {
+    const stmt = db.prepare(insertQuery);
+
+    Object.entries(data).forEach(([courseCode, courseData]) => {
+      const {
+        Title,
+        Units,
+        Description,
+        "Average Grade": AverageGrade,
+        Prerequisites,
+      } = courseData;
+      stmt.run(
+        courseCode,
+        Title,
+        Units,
+        Description,
+        AverageGrade,
+        Prerequisites
+      );
+    });
+
+    stmt.finalize((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      return res.json({ success: "eecs table populated" });
+    });
+  });
+});
+
+app.post("/populate-physics", (req, res) => {
+  const physicsClassInfo = "../class-scrapper/physics_scraping_results.json";
+
+  const jsonData = fs.readFileSync(physicsClassInfo, "utf-8");
+  const data = JSON.parse(jsonData);
+  const insertQuery = `INSERT INTO physics VALUES (?, ?, ?, ?, ?, ?)`;
+
+  db.serialize(() => {
+    const stmt = db.prepare(insertQuery);
+
+    Object.entries(data).forEach(([courseCode, courseData]) => {
+      const {
+        Title,
+        Units,
+        Description,
+        "Average Grade": AverageGrade,
+        Prerequisites,
+      } = courseData;
+      stmt.run(
+        courseCode,
+        Title,
+        Units,
+        Description,
+        AverageGrade,
+        Prerequisites
+      );
+    });
+
+    stmt.finalize((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      return res.json({ success: "physics table populated" });
+    });
+  });
+});
+
+app.post("/populate-math", (req, res) => {
+  const mathClassInfo = "../class-scrapper/math_scraping_results.json";
+
+  const jsonData = fs.readFileSync(mathClassInfo, "utf-8");
+  const data = JSON.parse(jsonData);
+  const insertQuery = `INSERT INTO math VALUES (?, ?, ?, ?, ?, ?)`;
+
+  db.serialize(() => {
+    const stmt = db.prepare(insertQuery);
+
+    Object.entries(data).forEach(([courseCode, courseData]) => {
+      const {
+        Title,
+        Units,
+        Description,
+        "Average Grade": AverageGrade,
+        Prerequisites,
+      } = courseData;
+      stmt.run(
+        courseCode,
+        Title,
+        Units,
+        Description,
+        AverageGrade,
+        Prerequisites
+      );
+    });
+
+    stmt.finalize((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      return res.json({ success: "math table populated" });
+    });
+  });
+});
+
+app.get("/COMPSCI", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM compsci WHERE CourseCode = ?";
+  db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     if (!row) {
-      return res.status(401).json({ error: "Invalid token." });
+      return res.status(401).json({ error: "Invalid Class Code." });
     }
-    return res.json({ id: row.id, name: row.name, email: row.email });
+    return res.json({
+      courseCode: row.CourseCode,
+      title: row.Title,
+      units: row.Units,
+      description: row.Description,
+      averageGrade: row.AverageGrade,
+      prerequisites: row.Prerequisites,
+    });
+  });
+});
+
+app.get("/MATH", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM math WHERE CourseCode = ?";
+  db.get(sql, [code], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(401).json({ error: "Invalid Class Code." });
+    }
+    return res.json({
+      courseCode: row.CourseCode,
+      title: row.Title,
+      units: row.Units,
+      description: row.Description,
+      averageGrade: row.AverageGrade,
+      prerequisites: row.Prerequisites,
+    });
+  });
+});
+
+app.get("/EECS", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM eecs WHERE CourseCode = ?";
+  db.get(sql, [code], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(401).json({ error: "Invalid Class Code." });
+    }
+    return res.json({
+      courseCode: row.CourseCode,
+      title: row.Title,
+      units: row.Units,
+      description: row.Description,
+      averageGrade: row.AverageGrade,
+      prerequisites: row.Prerequisites,
+    });
+  });
+});
+
+app.get("/DATA", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM data WHERE CourseCode = ?";
+  db.get(sql, [code], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(401).json({ error: "Invalid Class Code." });
+    }
+    return res.json({
+      courseCode: row.CourseCode,
+      title: row.Title,
+      units: row.Units,
+      description: row.Description,
+      averageGrade: row.AverageGrade,
+      prerequisites: row.Prerequisites,
+    });
+  });
+});
+
+app.get("/PHYSICS", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM physics WHERE CourseCode = ?";
+  db.get(sql, [code], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(401).json({ error: "Invalid Class Code." });
+    }
+    return res.json({
+      courseCode: row.CourseCode,
+      title: row.Title,
+      units: row.Units,
+      description: row.Description,
+      averageGrade: row.AverageGrade,
+      prerequisites: row.Prerequisites,
+    });
   });
 });
 
