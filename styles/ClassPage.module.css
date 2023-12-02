@@ -1,3 +1,21 @@
 .classInfoContainer {
   margin-right: 25px;
 }
+
+.coverPhoto {
+  z-index: -1;
+}
+
+.CenterTextContainer {
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: black;
+  border: 1px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.CenterText {
+  color: blue;
+}

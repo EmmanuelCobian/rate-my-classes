@@ -4,7 +4,6 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 import Login from "@/pages/login";
-import styles from "@/styles/Coverpage.module.css";
 import React, { useState } from "react";
 
 export default function CoverNav() {
@@ -16,6 +15,7 @@ export default function CoverNav() {
   };
 
   return (
+  <div>
     <Navbar id="Navbar" expand="lg" className={`bg-dark-body-tertiary`}>
       <Container>
         <Navbar.Brand href="#home" />
@@ -59,5 +59,9 @@ export default function CoverNav() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+  <section>
+
+  </section>
+</div>
   );
 }

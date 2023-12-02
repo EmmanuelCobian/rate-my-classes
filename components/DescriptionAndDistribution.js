@@ -10,9 +10,10 @@ const Description = styled.p`
 
 const DistributionContainer = styled.div`
   width: 400px;
-  height: 600;
+  height: 350px;
   background: lightgray;
 `;
+
 export default function DescriptionAndDistribution(props) {
   return (
     <div>

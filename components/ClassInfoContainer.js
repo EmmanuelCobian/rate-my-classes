@@ -26,6 +26,8 @@ export default function ClassInfoContainer(props) {
       <Ratings
         difficulty={props.difficulty}
         interest={props.interest}
+        averageGrade={props.averageGrade}
+        units={props.units}
       ></Ratings>
 
       <div>
@@ -35,7 +37,7 @@ export default function ClassInfoContainer(props) {
       </div>
 
       <div>
-        <button>Add Review</button>
+        <a href="./createReviewPage.js"><button type="button" class="btn btn-dark">Add review</button></a>
       </div>
     </div>
   );

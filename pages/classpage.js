@@ -28,12 +28,19 @@ export default function ClassPage() {
           courseName="Data Structures & Algorithms"
           difficulty="5.0"
           interest="5.0"
+          averageGrade="A++"
+          units="4"
           lectureAttendance="Yes"
           timeConflict="No"
           demand="High"
         ></ClassInfoContainer>
         <DescriptionAndDistribution description=" Fundamental dynamic data structures, including linear lists, queues, trees, and other linked structures; arrays strings, and hash tables. Storage management. Elementary principles of software engineering. Abstract data types. Algorithms for sorting and searching. Introduction to the Java programming language"></DescriptionAndDistribution>
       </InfoContainer>
+
+      
+
+
+
       <StudentReview
         profe="Nick Weaver"
         term="Spring 2022"
