@@ -22,6 +22,41 @@ const columns = [
   "Prerequisites TEXT",
 ];
 
+// db.run(`DROP TABLE compsci`, (err) => {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log("deleted compsci table");
+// });
+
+// db.run(`DROP TABLE math`, (err) => {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log("deleted math table");
+// });
+
+// db.run(`DROP TABLE eecs`, (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("deleted eecs table");
+//   })
+
+//   db.run(`DROP TABLE physics`, (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("deleted physics table");
+//   })
+
+//   db.run(`DROP TABLE data`, (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("deleted data table");
+//   })
+
 db.run(`CREATE TABLE IF NOT EXISTS compsci (${columns.join(", ")})`, (err) => {
   if (err) {
     return console.error(err.message);
@@ -244,7 +279,10 @@ app.post("/populate-math", (req, res) => {
 
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
-  const sql = "SELECT * FROM compsci WHERE CourseCode = ?";
+  const sql =
+    code == undefined
+      ? "SELECT * FROM compsci"
+      : "SELECT * FROM compsci WHERE CourseCode = ?";
   db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -265,7 +303,10 @@ app.get("/COMPSCI", (req, res) => {
 
 app.get("/MATH", (req, res) => {
   const code = req.query.code;
-  const sql = "SELECT * FROM math WHERE CourseCode = ?";
+  const sql =
+    code == undefined
+      ? "SELECT * FROM math"
+      : "SELECT * FROM math WHERE CourseCode = ?";
   db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -286,7 +327,10 @@ app.get("/MATH", (req, res) => {
 
 app.get("/EECS", (req, res) => {
   const code = req.query.code;
-  const sql = "SELECT * FROM eecs WHERE CourseCode = ?";
+  const sql =
+    code == undefined
+      ? "SELECT * FROM eecs"
+      : "SELECT * FROM eecs WHERE CourseCode = ?";
   db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -307,7 +351,10 @@ app.get("/EECS", (req, res) => {
 
 app.get("/DATA", (req, res) => {
   const code = req.query.code;
-  const sql = "SELECT * FROM data WHERE CourseCode = ?";
+  const sql =
+    code == undefined
+      ? "SELECT * FROM data"
+      : "SELECT * FROM data WHERE CourseCode = ?";
   db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -328,7 +375,10 @@ app.get("/DATA", (req, res) => {
 
 app.get("/PHYSICS", (req, res) => {
   const code = req.query.code;
-  const sql = "SELECT * FROM physics WHERE CourseCode = ?";
+  const sql =
+    code == undefined
+      ? "SELECT * FROM physics"
+      : "SELECT * FROM physics WHERE CourseCode = ?";
   db.get(sql, [code], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
