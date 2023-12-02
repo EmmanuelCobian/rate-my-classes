@@ -18,28 +18,27 @@ export default function CoverNav() {
   return (
     <Navbar id="Navbar" expand="lg" className={`bg-dark-body-tertiary`}>
       <Container>
-        <Navbar.Brand href="#home">
-          <a
-            href="https://www.instagram.com/justinwooooooo/"
-            className="text-black"
-          >
-            <i className="bi bi-facebook"></i>
-          </a>
-          <a
-            href="https://www.instagram.com/justinwooooooo/"
-            className="text-black mx-3"
-          >
-            <i className="bi bi-twitter"></i>
-          </a>
-          <a
-            href="https://www.instagram.com/justinwooooooo/"
-            className="text-black me-4"
-          >
-            <i className="bi bi-instagram"></i>
-          </a>
-          <span className="fs-3 fw-semibold">RateMyClasses</span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Brand href="#home" />
+        <a
+          href="https://www.instagram.com/justinwooooooo/"
+          className="text-black"
+        >
+          <i className="bi bi-facebook"></i>
+        </a>
+        <a
+          href="https://www.instagram.com/justinwooooooo/"
+          className="text-black mx-3"
+        >
+          <i className="bi bi-twitter"></i>
+        </a>
+        <a
+          href="https://www.instagram.com/justinwooooooo/"
+          className="text-black me-4"
+        >
+          <i className="bi bi-instagram"></i>
+        </a>
+        <span className="fs-3 fw-semibold">RateMyClasses</span>
+        = <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Nav.Link href="#home">
@@ -49,7 +48,7 @@ export default function CoverNav() {
                 className="me-3"
                 onClick={handleClick}
               >
-                <i class="bi bi-cloud-sun"></i>
+                <i className="bi bi-cloud-sun"></i>
               </Button>
               <Button variant="light">Home</Button>
             </Nav.Link>
