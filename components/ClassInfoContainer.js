@@ -2,6 +2,8 @@ import Ratings from "./Ratings.js";
 import styles from "@/styles/ClassInfo.module.css";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
+// import { useHistory } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const CourseName = styled.h3`
   font-weight: bold;
@@ -17,6 +19,8 @@ const AddReviewButton = styled(Button)`
 `;
 
 export default function ClassInfoContainer(props) {
+  // const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
       <div>
@@ -39,12 +43,6 @@ export default function ClassInfoContainer(props) {
         <p>Lecture Mandatory: {props.lectureAttendance}</p>
         <p>Time Conflict Allowed: {props.timeConflict}</p>
         <p>Demand: {props.demand}</p>
-      </div>
-
-      <div>
-        <a href="./createReviewPage">
-          <AddReviewButton>Add Review</AddReviewButton>
-        </a>
       </div>
     </div>
   );
