@@ -103,7 +103,63 @@ app.post("/populate-tables", (req, res) => {
   return res.json({ success: "tables populated" });
 });
 
-app.post("/add-review", (req, res) => {});
+app.post("/add-review", (req, res) => {
+  const {
+    Author,
+    CourseCode,
+    Review,
+    Difficulty,
+    Interest,
+    Professor,
+    Term,
+    Attendance,
+    Textbook,
+    ThumbsUp,
+    ThumbsDown,
+  } = req.query;
+  const sql = `
+    INSERT INTO reviews (
+      Author,
+      CourseCode,
+      Review,
+      Difficulty,
+      Interest,
+      Professor,
+      Term,
+      Attendance,
+      Textbook,
+      ThumbsUp,
+      ThumbsDown
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.run(
+    sql,
+    [
+      Author,
+      CourseCode,
+      Review,
+      Difficulty,
+      Interest,
+      Professor,
+      Term,
+      Attendance,
+      Textbook,
+      ThumbsUp,
+      ThumbsDown,
+    ],
+    (err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      return res.json({
+        success: true,
+        message: "Review added to reviews table successfully",
+      });
+    }
+  );
+});
 
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
@@ -194,16 +250,28 @@ app.get("/get-author-reviews", (req, res) => {
   const author = req.query.author;
   const sql = "SELECT * FROM reviews WHERE Author = ?";
   db.all(sql, [author], (err, rows) => {
-
-  })
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Author." });
+    }
+    return res.json(rows);
+  });
 });
 
 app.get("/get-class-reviews", (req, res) => {
   const code = req.query.code;
   const sql = "SELECT * FROM reviews WHERE CourseCode = ?";
   db.all(sql, [code], (err, rows) => {
-
-  })
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
+    }
+    return res.json(rows);
+  });
 });
 
 app.get("/", (req, res) => {
