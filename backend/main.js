@@ -10,16 +10,29 @@ let db = new sqlite3.Database("database.db", (err) => {
   if (err) {
     return console.error(err.message);
   }
-  console.log("connected to the in-memory database");
+  console.log("connected to the database");
 });
 
-const columns = [
-  "CourseCode TEXT",
+const classColumns = [
+  "CourseCode TEXT PRIMARY KEY",
   "Title TEXT",
   "Units TEXT",
   "Description TEXT",
   "AverageGrade TEXT",
   "Prerequisites TEXT",
+];
+const reviewColumns = [
+  "Author TEXT",
+  "CourseCode TEXT",
+  "Review TEXT",
+  "Difficulty INT",
+  "Interest INT",
+  "Professor TEXT",
+  "Term TEXT",
+  "Attendance TEXT",
+  "Textbook TEXT",
+  "ThumbsUp INT",
+  "ThumbsDown INT",
 ];
 const departments = ["compsci", "physics", "eecs", "data", "math"];
 
@@ -29,15 +42,24 @@ app.post("/delete-tables", (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-    })
-  })
-  return res.status(200).json({ success: 'tables deleted' })
-})
+    });
+  });
+  return res.status(200).json({ success: "tables deleted" });
+});
 
 app.post("/populate-tables", (req, res) => {
+  db.run(
+    `CREATE TABLE IF NOT EXISTS reviews (${reviewColumns.join(", ")})`,
+    (err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
   departments.forEach((department) => {
     db.run(
-      `CREATE TABLE IF NOT EXISTS ${department} (${columns.join(", ")})`,
+      `CREATE TABLE IF NOT EXISTS ${department} (${classColumns.join(", ")})`,
       (err) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -81,27 +103,22 @@ app.post("/populate-tables", (req, res) => {
   return res.json({ success: "tables populated" });
 });
 
+app.post("/add-review", (req, res) => {});
+
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
   const sql =
     code == undefined
       ? "SELECT * FROM compsci"
       : "SELECT * FROM compsci WHERE CourseCode = ?";
-  db.get(sql, [code], (err, row) => {
+  db.all(sql, [code], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(401).json({ error: "Invalid Class Code." });
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
     }
-    return res.json({
-      courseCode: row.CourseCode,
-      title: row.Title,
-      units: row.Units,
-      description: row.Description,
-      averageGrade: row.AverageGrade,
-      prerequisites: row.Prerequisites,
-    });
+    return res.json(rows);
   });
 });
 
@@ -111,21 +128,14 @@ app.get("/MATH", (req, res) => {
     code == undefined
       ? "SELECT * FROM math"
       : "SELECT * FROM math WHERE CourseCode = ?";
-  db.get(sql, [code], (err, row) => {
+  db.all(sql, [code], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(401).json({ error: "Invalid Class Code." });
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
     }
-    return res.json({
-      courseCode: row.CourseCode,
-      title: row.Title,
-      units: row.Units,
-      description: row.Description,
-      averageGrade: row.AverageGrade,
-      prerequisites: row.Prerequisites,
-    });
+    return res.json(rows);
   });
 });
 
@@ -135,21 +145,14 @@ app.get("/EECS", (req, res) => {
     code == undefined
       ? "SELECT * FROM eecs"
       : "SELECT * FROM eecs WHERE CourseCode = ?";
-  db.get(sql, [code], (err, row) => {
+  db.all(sql, [code], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(401).json({ error: "Invalid Class Code." });
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
     }
-    return res.json({
-      courseCode: row.CourseCode,
-      title: row.Title,
-      units: row.Units,
-      description: row.Description,
-      averageGrade: row.AverageGrade,
-      prerequisites: row.Prerequisites,
-    });
+    return res.json(rows);
   });
 });
 
@@ -159,21 +162,14 @@ app.get("/DATA", (req, res) => {
     code == undefined
       ? "SELECT * FROM data"
       : "SELECT * FROM data WHERE CourseCode = ?";
-  db.get(sql, [code], (err, row) => {
+  db.all(sql, [code], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(401).json({ error: "Invalid Class Code." });
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
     }
-    return res.json({
-      courseCode: row.CourseCode,
-      title: row.Title,
-      units: row.Units,
-      description: row.Description,
-      averageGrade: row.AverageGrade,
-      prerequisites: row.Prerequisites,
-    });
+    return res.json(rows);
   });
 });
 
@@ -183,22 +179,31 @@ app.get("/PHYSICS", (req, res) => {
     code == undefined
       ? "SELECT * FROM physics"
       : "SELECT * FROM physics WHERE CourseCode = ?";
-  db.get(sql, [code], (err, row) => {
+  db.all(sql, [code], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(401).json({ error: "Invalid Class Code." });
+    if (rows.length == 0) {
+      return res.status(400).json({ error: "Invalid Class Code." });
     }
-    return res.json({
-      courseCode: row.CourseCode,
-      title: row.Title,
-      units: row.Units,
-      description: row.Description,
-      averageGrade: row.AverageGrade,
-      prerequisites: row.Prerequisites,
-    });
+    return res.json(rows);
   });
+});
+
+app.get("/get-author-reviews", (req, res) => {
+  const author = req.query.author;
+  const sql = "SELECT * FROM reviews WHERE Author = ?";
+  db.all(sql, [author], (err, rows) => {
+
+  })
+});
+
+app.get("/get-class-reviews", (req, res) => {
+  const code = req.query.code;
+  const sql = "SELECT * FROM reviews WHERE CourseCode = ?";
+  db.all(sql, [code], (err, rows) => {
+
+  })
 });
 
 app.get("/", (req, res) => {
