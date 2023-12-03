@@ -21,260 +21,64 @@ const columns = [
   "AverageGrade TEXT",
   "Prerequisites TEXT",
 ];
+const departments = ["compsci", "physics", "eecs", "data", "math"];
 
-// db.run(`DROP TABLE compsci`, (err) => {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log("deleted compsci table");
-// });
-
-// db.run(`DROP TABLE math`, (err) => {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log("deleted math table");
-// });
-
-// db.run(`DROP TABLE eecs`, (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log("deleted eecs table");
-//   })
-
-//   db.run(`DROP TABLE physics`, (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log("deleted physics table");
-//   })
-
-//   db.run(`DROP TABLE data`, (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log("deleted data table");
-//   })
-
-db.run(`CREATE TABLE IF NOT EXISTS compsci (${columns.join(", ")})`, (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Created compsci table");
-});
-
-db.run(`CREATE TABLE IF NOT EXISTS math (${columns.join(", ")})`, (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Created math table");
-});
-
-db.run(`CREATE TABLE IF NOT EXISTS eecs (${columns.join(", ")})`, (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Created eecs table");
-});
-
-db.run(`CREATE TABLE IF NOT EXISTS physics (${columns.join(", ")})`, (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Created physics table");
-});
-
-db.run(`CREATE TABLE IF NOT EXISTS data (${columns.join(", ")})`, (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Created data table");
-});
-
-app.post("/populate-compsci", (req, res) => {
-  const csClassInfo = "../class-scrapper/compsci_scraping_results.json";
-
-  const jsonData = fs.readFileSync(csClassInfo, "utf-8");
-  const data = JSON.parse(jsonData);
-  const insertQuery = `INSERT INTO compsci VALUES (?, ?, ?, ?, ?, ?)`;
-
-  db.serialize(() => {
-    const stmt = db.prepare(insertQuery);
-
-    Object.entries(data).forEach(([courseCode, courseData]) => {
-      const {
-        Title,
-        Units,
-        Description,
-        "Average Grade": AverageGrade,
-        Prerequisites,
-      } = courseData;
-      stmt.run(
-        courseCode,
-        Title,
-        Units,
-        Description,
-        AverageGrade,
-        Prerequisites
-      );
-    });
-
-    stmt.finalize((err) => {
+app.post("/delete-tables", (req, res) => {
+  departments.forEach((department) => {
+    db.run(`DROP TABLE ${department}`, (err) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      return res.json({ success: "compsci table populated" });
-    });
-  });
-});
+    })
+  })
+  return res.status(200).json({ success: 'tables deleted' })
+})
 
-app.post("/populate-data", (req, res) => {
-  const dataClassInfo = "../class-scrapper/data_scraping_results.json";
-
-  const jsonData = fs.readFileSync(dataClassInfo, "utf-8");
-  const data = JSON.parse(jsonData);
-  const insertQuery = `INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)`;
-
-  db.serialize(() => {
-    const stmt = db.prepare(insertQuery);
-
-    Object.entries(data).forEach(([courseCode, courseData]) => {
-      const {
-        Title,
-        Units,
-        Description,
-        "Average Grade": AverageGrade,
-        Prerequisites,
-      } = courseData;
-      stmt.run(
-        courseCode,
-        Title,
-        Units,
-        Description,
-        AverageGrade,
-        Prerequisites
-      );
-    });
-
-    stmt.finalize((err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
+app.post("/populate-tables", (req, res) => {
+  departments.forEach((department) => {
+    db.run(
+      `CREATE TABLE IF NOT EXISTS ${department} (${columns.join(", ")})`,
+      (err) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
       }
-      return res.json({ success: "data table populated" });
+    );
+
+    let file = "../class-scrapper/" + department + "_scraping_results.json";
+    let jsonData = fs.readFileSync(file, "utf-8");
+    let data = JSON.parse(jsonData);
+    let insertQuery = `INSERT OR REPLACE INTO ${department} VALUES (?, ?, ?, ?, ?, ?)`;
+
+    db.serialize(() => {
+      const stmt = db.prepare(insertQuery);
+
+      Object.entries(data).forEach(([courseCode, courseData]) => {
+        const {
+          Title,
+          Units,
+          Description,
+          "Average Grade": AverageGrade,
+          Prerequisites,
+        } = courseData;
+        stmt.run(
+          courseCode,
+          Title,
+          Units,
+          Description,
+          AverageGrade,
+          Prerequisites
+        );
+      });
+
+      stmt.finalize((err) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+      });
     });
   });
-});
-
-app.post("/populate-eecs", (req, res) => {
-  const eecsClassInfo = "../class-scrapper/eecs_scraping_results.json";
-
-  const jsonData = fs.readFileSync(eecsClassInfo, "utf-8");
-  const data = JSON.parse(jsonData);
-  const insertQuery = `INSERT INTO eecs VALUES (?, ?, ?, ?, ?, ?)`;
-
-  db.serialize(() => {
-    const stmt = db.prepare(insertQuery);
-
-    Object.entries(data).forEach(([courseCode, courseData]) => {
-      const {
-        Title,
-        Units,
-        Description,
-        "Average Grade": AverageGrade,
-        Prerequisites,
-      } = courseData;
-      stmt.run(
-        courseCode,
-        Title,
-        Units,
-        Description,
-        AverageGrade,
-        Prerequisites
-      );
-    });
-
-    stmt.finalize((err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      return res.json({ success: "eecs table populated" });
-    });
-  });
-});
-
-app.post("/populate-physics", (req, res) => {
-  const physicsClassInfo = "../class-scrapper/physics_scraping_results.json";
-
-  const jsonData = fs.readFileSync(physicsClassInfo, "utf-8");
-  const data = JSON.parse(jsonData);
-  const insertQuery = `INSERT INTO physics VALUES (?, ?, ?, ?, ?, ?)`;
-
-  db.serialize(() => {
-    const stmt = db.prepare(insertQuery);
-
-    Object.entries(data).forEach(([courseCode, courseData]) => {
-      const {
-        Title,
-        Units,
-        Description,
-        "Average Grade": AverageGrade,
-        Prerequisites,
-      } = courseData;
-      stmt.run(
-        courseCode,
-        Title,
-        Units,
-        Description,
-        AverageGrade,
-        Prerequisites
-      );
-    });
-
-    stmt.finalize((err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      return res.json({ success: "physics table populated" });
-    });
-  });
-});
-
-app.post("/populate-math", (req, res) => {
-  const mathClassInfo = "../class-scrapper/math_scraping_results.json";
-
-  const jsonData = fs.readFileSync(mathClassInfo, "utf-8");
-  const data = JSON.parse(jsonData);
-  const insertQuery = `INSERT INTO math VALUES (?, ?, ?, ?, ?, ?)`;
-
-  db.serialize(() => {
-    const stmt = db.prepare(insertQuery);
-
-    Object.entries(data).forEach(([courseCode, courseData]) => {
-      const {
-        Title,
-        Units,
-        Description,
-        "Average Grade": AverageGrade,
-        Prerequisites,
-      } = courseData;
-      stmt.run(
-        courseCode,
-        Title,
-        Units,
-        Description,
-        AverageGrade,
-        Prerequisites
-      );
-    });
-
-    stmt.finalize((err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      return res.json({ success: "math table populated" });
-    });
-  });
+  return res.json({ success: "tables populated" });
 });
 
 app.get("/COMPSCI", (req, res) => {
