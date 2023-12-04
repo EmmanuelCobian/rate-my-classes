@@ -33,6 +33,7 @@ export default function ClassInfoContainer(props) {
       ></Ratings>
 
       <div>
+        <p>Prerequisites: {props.prerequisites}</p>
         <p>Lecture Mandatory: {props.lectureAttendance}</p>
         <p>Time Conflict Allowed: {props.timeConflict}</p>
         <p>Demand: {props.demand}</p>

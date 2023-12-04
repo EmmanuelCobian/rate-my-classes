@@ -11,7 +11,7 @@ const Description = styled.p`
 
 const DistributionContainer = styled.div`
   width: 400px;
-  height: 350px;
+  height: 250px;
   background: lightgray;
 `;
 

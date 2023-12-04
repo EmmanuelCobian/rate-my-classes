@@ -78,6 +78,22 @@ const termOptions = [
   "Spring 2015",
 ];
 
+const ratingToColor = {
+  1: "#FF5733",
+  2: "#FF8054",
+  3: "#FF8C33",
+  4: "#A2D870",
+  5: "#4CAF50",
+};
+
+const ratingToColorReverse = {
+  1: "#4CAF50",
+  2: "#A2D870",
+  3: "#FF8C33",
+  4: "#FF8054",
+  5: "#FF5733",
+};
+
 export default function CreateReviewPage() {
   const { query } = useRouter();
 
@@ -88,8 +104,9 @@ export default function CreateReviewPage() {
     grade: "",
     mandatoryAttendance: null,
     mandatoryTextBook: null,
-    difficulty: "0",
-    interest: "0",
+    difficulty: "",
+    interest: "",
+    overallRating: "",
     description: "",
   });
 
@@ -162,14 +179,23 @@ export default function CreateReviewPage() {
   };
 
   const renderSlider = (label, name) => {
+    const color =
+      name == "difficulty"
+        ? ratingToColorReverse[formData[name]]
+        : ratingToColor[formData[name]];
     return (
       <QuestionAndAnswer>
-        <label>{label + ": " + formData[name]}</label>
+        <label>
+          {`${label}: `}
+          <span style={{ fontWeight: "bold", color: color }}>
+            {formData[name]}
+          </span>
+        </label>
         <input
           type="range"
           className="form-range"
           value={formData[name]}
-          min="0"
+          min="1"
           max="5"
           name={name}
           onChange={handleInputChange}
@@ -215,6 +241,7 @@ export default function CreateReviewPage() {
 
           {renderSlider("Course difficulty", "difficulty")}
           {renderSlider("Interest level", "interest")}
+          {renderSlider("Overall rating", "overallRating")}
 
           {renderInputField(
             "Description",

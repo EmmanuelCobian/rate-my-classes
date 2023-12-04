@@ -35,6 +35,7 @@ export default function ClassPage() {
             title={classData.title}
             averageGrade={classData.averageGrade}
             units={classData.units}
+            prerequisites={classData.prerequisites}
             overallRating={classData.overallRating ?? "N/A"}
             difficulty={classData.diffculty ?? "N/A"}
             interest={classData.interest ?? "N/A"}
