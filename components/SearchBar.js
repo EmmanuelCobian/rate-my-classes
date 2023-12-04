@@ -25,7 +25,7 @@ export default function SearchBar() {
   const handleOnKeyDown = (e) => {
     if (e.key === "Enter") {
       console.log("Searched for: " + e.target.value);
-      router.push(`/classpage?courseCode=${e.target.value}`);
+      router.push(`/classes/${e.target.value}`);
     }
   };
 
