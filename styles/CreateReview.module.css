@@ -1,0 +1,29 @@
+/* Custom radio buttons */
+.customRadio {
+  accent-color: black;
+  margin: 0 0.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  transform: translateY(0.4em);
+}
+
+/* Custom range slider */
+.customRange {
+  accent-color: black;
+}
+
+/***** Focus Styles *****/
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+.customRange:focus::-webkit-slider-thumb {
+  border: 1px solid #000000;
+  border-radius: 50%;
+  outline: 3px solid #000000;
+  outline-offset: 0.125rem;
+}
+/******** Firefox ********/
+.customRange:focus::-webkit-range-thumb {
+  border: 1px solid #000000;
+  border-radius: 50%;
+  outline: 3px solid #000000;
+  outline-offset: 0.125rem;
+}

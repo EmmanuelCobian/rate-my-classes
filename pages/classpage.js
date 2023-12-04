@@ -9,17 +9,22 @@ import { useEffect, useState } from "react";
 const InfoContainer = styled.div`
   display: flex;
   padding: 3rem;
-  justify-content: space-evenly;
-  width: 1420px;
+  justify-content: space-between;
+  width: 1300px;
   margin: auto;
+`;
+
+const ReviewTitle = styled.h3`
+  font-weight: bold;
 `;
 
 const ReviewsContainer = styled.div`
   display: flex;
   padding: 3rem;
   flex-direction: column;
+  gap: 2rem;
   align-items: flex-start;
-  width: 1420px;
+  width: 1300px;
   margin: auto;
 `;
 
@@ -31,16 +36,36 @@ export default function ClassPage() {
   useEffect(() => {
     if (!query) return;
 
+    // fetch(finalUrl, {
+    //   method: "POST",
+    // }).then(response => {
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+    //   return response.json();
+    // })
+    // .then(data => {
+    //   console.log('Success:', data);
+    // })
+    // .catch(error => {
+    //   console.error('Error:', error);
+    // });
+
     // Grabbing course info
     fetch(`http://localhost:2000/COMPSCI?code=${query.courseCode}`)
-      .then((response) => response.json())
+      .then((response) =>
+        // if (!response.ok) {
+        //   throw new Error("Network response was not ok");
+        // }
+        response.json()
+      )
       .then((data) => setClassData(data[0]));
 
     // Grabbing reviews
     fetch(`http://localhost:2000/get-class-reviews?code=${query.courseCode}`)
       .then((response) => {
         if (!response.ok && response.status == 400) {
-          return []
+          return [];
         } else if (!response.ok && response.status == 500) {
           throw new Error("Network response was not ok");
         } else {
@@ -79,6 +104,7 @@ export default function ClassPage() {
         </InfoContainer>
 
         <ReviewsContainer>
+          <ReviewTitle>Reviews</ReviewTitle>
           {reviews.map((review, index) => {
             return (
               <StudentReview

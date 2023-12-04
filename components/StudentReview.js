@@ -11,6 +11,8 @@ const StudentReview = (props) => {
         minWidth: "570px",
         height: "260px",
         backgroundColor: "rgb(217,217,217)",
+        border: "none",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
       }}
     >
       <Row className="h-100 w-100">
@@ -36,6 +38,7 @@ const StudentReview = (props) => {
               </div>
             </div>
             <div>
+              <br></br>
               <Card.Subtitle className="mb-1">
                 <strong>INTEREST</strong>
               </Card.Subtitle>
