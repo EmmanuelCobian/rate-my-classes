@@ -36,14 +36,15 @@ export default function ClassPage() {
   useEffect(() => {
     if (!query) return;
 
-    const department = query.class.split(' ')[0]
+    const department = query.class[0]
+    const courseCode = query.class.join(' ')
     // Grabbing course info
-    fetch(`http://localhost:2000/${department}?code=${query.class}`)
+    fetch(`http://localhost:2000/${department}?code=${courseCode}`)
       .then((response) => response.json())
       .then((data) => setClassData(data[0]));
 
     // Grabbing reviews
-    fetch(`http://localhost:2000/get-class-reviews?code=${query.class}`)
+    fetch(`http://localhost:2000/get-class-reviews?code=${courseCode}`)
       .then((response) => {
         if (!response.ok && response.status == 400) {
           return []
