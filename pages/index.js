@@ -1,17 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import styled from "styled-components";
-import Container from "react-bootstrap/Container";
-import CoverNav from "@/components/Coverpage";
-import ClassPage from "./classpage";
-import stylings from "@/styles/ClassPage.module.css";
-import Ratings from "@/components/Ratings.js";
-import ClassInfoContainer from "@/components/ClassInfoContainer";
-import { Button } from "react-bootstrap";
+import CoverNav from "@/components/CoverNav";
+import SearchBar from "@/components/SearchBar";
 
-const inter = Inter({ subsets: ["latin"] });
-
+// #region Styling
 const BackgroundImage = styled.div`
   position: absolute;
   width: 100%;
@@ -53,22 +44,6 @@ const CenterTextContainer = styled.div`
   }
 `;
 
-const SearchInput = styled.input`
-  padding: 15px;
-  width: 80%;
-  padding: 10px;
-  max-width: 800px;
-  border: none;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  font-size: 18px;
-  text-align: center;
-  backdrop-filter: blur(8px);
-  margin: 0 auto;
-  margin-top: auto;
-  margin-bottom: 180px;
-`;
-
 const Title = styled.h1`
   font-family: "Arial", sans-serif;
   text-transform: uppercase;
@@ -78,8 +53,7 @@ const Title = styled.h1`
   font-size: 48px;
   text-align: center;
 `;
-
-const search = styled.input``;
+// #endreigon
 
 export default function Home() {
   return (
@@ -89,11 +63,7 @@ export default function Home() {
         <BackgroundImage />
         <CenterTextContainer>
           <Title className="CenterText">FIND MY CLASS</Title>
-          <SearchInput
-            type="text"
-            className="search-input"
-            placeholder="Search by name, professor, class id..."
-          />
+          <SearchBar />
         </CenterTextContainer>
       </BackgroundContainer>
     </div>

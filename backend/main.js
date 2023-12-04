@@ -279,6 +279,7 @@ app.post("/populate-math", (req, res) => {
 
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
+  console.log("Code: " + code);
   const sql =
     code == undefined
       ? "SELECT * FROM compsci"

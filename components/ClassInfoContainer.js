@@ -2,8 +2,7 @@ import Ratings from "./Ratings.js";
 import styles from "@/styles/ClassInfo.module.css";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
-import Link from 'next/link';
-
+import Link from "next/link";
 
 const CourseName = styled.h3`
   font-weight: bold;
@@ -15,7 +14,6 @@ const OverallRating = styled.p`
 `;
 
 export default function ClassInfoContainer(props) {
-
   return (
     <div className={styles.container}>
       <div>
@@ -23,8 +21,8 @@ export default function ClassInfoContainer(props) {
       </div>
 
       <div>
-        <p>{props.courseNumber}</p>
-        <CourseName>{props.courseName}</CourseName>
+        <p>{props.courseCode}</p>
+        <CourseName>{props.title}</CourseName>
       </div>
 
       <Ratings
@@ -39,8 +37,10 @@ export default function ClassInfoContainer(props) {
         <p>Time Conflict Allowed: {props.timeConflict}</p>
         <p>Demand: {props.demand}</p>
       </div>
-        
-      <Link href={`/createReviewPage?courseNumber=${props.courseNumber}&courseName=${props.courseName}`}>
+
+      <Link
+        href={`/createReviewPage?courseCode=${props.courseCode}&title=${props.title}`}
+      >
         <Button className="btn btn-dark">Add Review</Button>
       </Link>
     </div>

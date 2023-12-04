@@ -1,9 +1,8 @@
-import CoverNav from "@/components/Coverpage";
+import CoverNav from "@/components/CoverNav";
 import styled from "styled-components";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { useRouter } from 'next/router';
-
+import { useRouter } from "next/router";
 
 // #region CSS
 const PageContainer = styled.div`
@@ -80,15 +79,7 @@ const termOptions = [
 ];
 
 export default function CreateReviewPage() {
-
-  const {query} = useRouter();
-
-  // const router = useRouter();
-  // const { courseName } = router.query;
-
-  // if (!courseName) {
-  //   return <h1> Couldn't find it bro</h1>
-  // }
+  const { query } = useRouter();
 
   // State to manage form inputs
   const [formData, setFormData] = useState({
@@ -207,7 +198,7 @@ export default function CreateReviewPage() {
     <>
       <CoverNav />
       <PageContainer>
-        <Title>{`Review for ${query.courseNumber}: ${query.courseName}`}</Title>
+        <Title>{`Review for ${query.courseCode}: ${query.title}`}</Title>
         <br></br>
         <Form onSubmit={handleSubmit}>
           {renderInputField(
@@ -232,7 +223,6 @@ export default function CreateReviewPage() {
             4
           )}
 
-
           <Button type="submit" className="btn btn-dark">
             Submit
           </Button>
@@ -241,38 +231,3 @@ export default function CreateReviewPage() {
     </>
   );
 }
-
-// export async function getStaticPaths() {
-//   // Return a list of possible value for id
-//   const paths = getAllPostIds();
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
-
-// export async function getStaticProps({ params }) {
-//   const postData = getPostData(params.id);
-//   return {
-//     props: {
-//       postData,
-//     },
-//   };
-// }
-
-// export async function getStaticPaths() {
-
-// }
-
-// export async function getStaticProps({ params }) {
-//   const { courseName } = params;
-
-//   // Fetch product data based on productId
-
-//   return {
-//     props: {
-//       courseName,
-//       // Other product data
-//     },
-//   };
-// }
