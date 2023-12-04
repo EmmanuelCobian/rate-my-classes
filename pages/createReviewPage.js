@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import styles from "@/styles/CreateReview.module.css";
 
 // #region CSS
 const PageContainer = styled.div`
@@ -40,6 +41,7 @@ const QuestionAndAnswer = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
 // #endregion
 
 const gradeOptions = [
@@ -145,22 +147,23 @@ export default function CreateReviewPage() {
       )
       .join("&");
 
-    const apiUrl = "http://localhost:2000/add-review"
+    const apiUrl = "http://localhost:2000/add-review";
     const finalUrl = `${apiUrl}?${queryString}`;
     fetch(finalUrl, {
       method: "POST",
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
     })
-    .then(data => {
-      console.log('Success:', data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const renderRadioQuestion = (label, name) => {
@@ -171,7 +174,7 @@ export default function CreateReviewPage() {
           <div className="form-check form-check-inline">
             <input
               checked={formData[name] === "yes"}
-              className="form-check-input"
+              className={`${styles.customRadio}`}
               name={name}
               onChange={handleInputChange}
               type="radio"
@@ -183,7 +186,7 @@ export default function CreateReviewPage() {
           <div className="form-check form-check-inline">
             <input
               checked={formData[name] === "no"}
-              className="form-check-input"
+              className={`${styles.customRadio}`}
               name={name}
               onChange={handleInputChange}
               type="radio"
@@ -231,8 +234,8 @@ export default function CreateReviewPage() {
         </label>
         <input
           type="range"
-          className="form-range"
           value={formData[name]}
+          className={`${styles.customRange}`}
           min="1"
           max="5"
           name={name}
