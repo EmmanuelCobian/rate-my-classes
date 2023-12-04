@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 // #region CSS
 const PageContainer = styled.div`
@@ -78,7 +79,6 @@ const termOptions = [
   "Fall 2015",
   "Spring 2015",
 ];
-
 const ratingToColor = {
   1: "#FF5733",
   2: "#FF8054",
@@ -96,17 +96,19 @@ const ratingToColorReverse = {
 };
 
 export default function CreateReviewPage() {
+  const { data: session, status } = useSession();
+  const userName = session?.user?.name;
   const router = useRouter();
   const query = router.query;
 
   const [formData, setFormData] = useState({
     Attendance: null,
-    Author: "Henry",
+    Author: status == "authenticated" ? userName : "Anonymous",
     CourseCode: query.courseCode,
-    Difficulty: "",
+    Difficulty: 3,
     Grade: "",
-    Interest: "",
-    OverallRating: "",
+    Interest: 3,
+    OverallRating: 3,
     Professor: "",
     Review: "",
     Term: "",
@@ -133,40 +135,32 @@ export default function CreateReviewPage() {
     });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // router.push(`/classpage?courseCode=${query.courseCode}`);
-  };
-
-  // fetch(`http://localhost:2000/COMPSCI?code=${query.courseCode}`)
-  //     .then((response) => response.json())
-  //     .then((data) => setClassData(data));
-
   const handlePostRequest = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:2000/add-review", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    const queryString = Object.entries(formData)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&");
 
+    const apiUrl = "http://localhost:2000/add-review"
+    const finalUrl = `${apiUrl}?${queryString}`;
+    fetch(finalUrl, {
+      method: "POST",
+    }).then(response => {
       if (!response.ok) {
-        // Handle error
-        console.error("Error:", response.statusText);
-        return;
+        throw new Error('Network response was not ok');
       }
-
-      const responseData = await response.json();
-      console.log("Response data:", responseData);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   };
 
   const renderRadioQuestion = (label, name) => {

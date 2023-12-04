@@ -26,7 +26,7 @@ const ReviewsContainer = styled.div`
 export default function ClassPage() {
   const { query } = useRouter();
   const [classData, setClassData] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     if (!query) return;
@@ -38,15 +38,24 @@ export default function ClassPage() {
 
     // Grabbing reviews
     fetch(`http://localhost:2000/get-class-reviews?code=${query.courseCode}`)
-      .then((response) => response.json())
-      .then((data) => setReviews(data));
+      .then((response) => {
+        if (!response.ok && response.status == 400) {
+          return []
+        } else if (!response.ok && response.status == 500) {
+          throw new Error("Network response was not ok");
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        setReviews(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }, [query]);
 
-  const renderReviews = () => {};
-
   const renderClassInfoAndReviews = () => {
-    console.log("Class data: " + JSON.stringify(classData));
-    console.log("Reviews: " + JSON.stringify(reviews));
     return (
       <div>
         <CoverNav />
@@ -70,18 +79,23 @@ export default function ClassPage() {
         </InfoContainer>
 
         <ReviewsContainer>
-          <StudentReview
-            profe="Nick Weaver"
-            term="Spring 2022"
-            grade="A+"
-            attendanceNeeded="Not Mandatory"
-            textbookNeeded="Not Mandatory"
-            classRev="I love Nick Weaver..."
-            helpfulCount="10"
-            notHelpfulCount="10"
-            diffRating="4.0"
-            intRating="3.0"
-          />
+          {reviews.map((review, index) => {
+            return (
+              <StudentReview
+                key={index}
+                profe={review.Professor}
+                term={review.Term}
+                grade={review.Grade}
+                attendanceNeeded={review.Attendance}
+                textbookNeeded={review.Textbook}
+                classRev={review.Review}
+                helpfulCount={review.ThumbsUp}
+                notHelpfulCount={review.ThumbsDown}
+                diffRating={review.Difficulty}
+                intRating={review.Interest}
+              />
+            );
+          })}
         </ReviewsContainer>
       </div>
     );

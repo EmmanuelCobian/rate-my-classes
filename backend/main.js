@@ -47,6 +47,11 @@ app.post("/delete-tables", (req, res) => {
       }
     });
   });
+  db.run(`DROP TABLE reviews`, (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
   return res.status(200).json({ success: "tables deleted" });
 });
 
@@ -107,7 +112,6 @@ app.post("/populate-tables", (req, res) => {
 });
 
 app.post("/add-review", (req, res) => {
-  res.send("POST Request Called");
   const {
     Attendance,
     Author,
@@ -137,7 +141,7 @@ app.post("/add-review", (req, res) => {
     Term,
     Textbook,
     ThumbsDown,
-    ThumbsUp,
+    ThumbsUp
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -174,7 +178,6 @@ app.post("/add-review", (req, res) => {
 
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
-  console.log("Code: " + code);
   const sql =
     code == undefined
       ? "SELECT * FROM compsci"
