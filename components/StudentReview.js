@@ -68,7 +68,8 @@ const StudentReview = (props) => {
             <Container style={{ padding: "0" }}>
               <Card.Text className="mb-0">
                 Professor: <strong>{props.profe}</strong> Term:{" "}
-                <strong>{props.term}</strong>
+                <strong>{props.term}</strong> Grade:{" "}
+                <strong>{props.grade}</strong>
               </Card.Text>
               <Card.Text className="mb-0">
                 Attendance: <strong>{props.attendanceNeeded}</strong> Textbook:{" "}

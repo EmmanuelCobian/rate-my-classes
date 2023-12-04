@@ -13,6 +13,10 @@ const OverallRating = styled.p`
   font-size: 2rem;
 `;
 
+const CourseInfo = styled.div`
+  max-width: 600px;
+`;
+
 export default function ClassInfoContainer(props) {
   return (
     <div className={styles.container}>
@@ -32,17 +36,25 @@ export default function ClassInfoContainer(props) {
         units={props.units}
       ></Ratings>
 
-      <div>
-        <p>Prerequisites: {props.prerequisites}</p>
-        <p>Lecture Mandatory: {props.lectureAttendance}</p>
-        <p>Time Conflict Allowed: {props.timeConflict}</p>
-        <p>Demand: {props.demand}</p>
-      </div>
+      <CourseInfo>
+        <p>
+          <span style={{ fontWeight: "bold" }}>{"Prerequisites: "}</span>
+          {props.prerequisites}
+        </p>
+        <p>
+          <span style={{ fontWeight: "bold" }}>{"Lecture Mandatory: "}</span>
+          {props.mandatoryLecture}
+        </p>
+        <p>
+          <span style={{ fontWeight: "bold" }}>{"Textbook Mandatory: "}</span>
+          {props.mandatoryTextbook}
+        </p>
+      </CourseInfo>
 
       <Link
         href={`/createReviewPage?courseCode=${props.courseCode}&title=${props.title}`}
       >
-        <Button className="btn btn-dark">Add Review</Button>
+        <Button className="btn btn-dark btn-lg">Add Review</Button>
       </Link>
     </div>
   );

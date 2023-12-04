@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const SearchInput = styled.input`
   padding: 15px;

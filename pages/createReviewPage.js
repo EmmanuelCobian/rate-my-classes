@@ -3,6 +3,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 // #region CSS
 const PageContainer = styled.div`
@@ -95,20 +96,33 @@ const ratingToColorReverse = {
 };
 
 export default function CreateReviewPage() {
-  const { query } = useRouter();
+  const router = useRouter();
+  const query = router.query;
 
-  // State to manage form inputs
   const [formData, setFormData] = useState({
-    professor: "",
-    term: "",
-    grade: "",
-    mandatoryAttendance: null,
-    mandatoryTextBook: null,
-    difficulty: "",
-    interest: "",
-    overallRating: "",
-    description: "",
+    Attendance: null,
+    Author: "Henry",
+    CourseCode: query.courseCode,
+    Difficulty: "",
+    Grade: "",
+    Interest: "",
+    OverallRating: "",
+    Professor: "",
+    Review: "",
+    Term: "",
+    Textbook: null,
+    ThumbsDown: 0,
+    ThumbsUp: 0,
   });
+
+  useEffect(() => {
+    if (!query) return;
+
+    setFormData({
+      ...formData,
+      CourseCode: query.courseCode,
+    });
+  }, [query]);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -123,6 +137,36 @@ export default function CreateReviewPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    // router.push(`/classpage?courseCode=${query.courseCode}`);
+  };
+
+  // fetch(`http://localhost:2000/COMPSCI?code=${query.courseCode}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setClassData(data));
+
+  const handlePostRequest = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:2000/add-review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        // Handle error
+        console.error("Error:", response.statusText);
+        return;
+      }
+
+      const responseData = await response.json();
+      console.log("Response data:", responseData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const renderRadioQuestion = (label, name) => {
@@ -226,26 +270,26 @@ export default function CreateReviewPage() {
       <PageContainer>
         <Title>{`Review for ${query.courseCode}: ${query.title}`}</Title>
         <br></br>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handlePostRequest}>
           {renderInputField(
             "Professor",
-            "professor",
+            "Professor",
             "Enter your professor's name",
             1
           )}
-          {renderDropDown("Term", "term", termOptions)}
-          {renderDropDown("Grade", "grade", gradeOptions)}
+          {renderDropDown("Term", "Term", termOptions)}
+          {renderDropDown("Grade", "Grade", gradeOptions)}
 
-          {renderRadioQuestion("Attendance mandatory", "mandatoryAttendance")}
-          {renderRadioQuestion("Text book mandatory", "mandatoryTextBook")}
+          {renderRadioQuestion("Attendance mandatory", "Attendance")}
+          {renderRadioQuestion("Text book mandatory", "Textbook")}
 
-          {renderSlider("Course difficulty", "difficulty")}
-          {renderSlider("Interest level", "interest")}
-          {renderSlider("Overall rating", "overallRating")}
+          {renderSlider("Course difficulty", "Difficulty")}
+          {renderSlider("Interest level", "Interest")}
+          {renderSlider("Overall rating", "OverallRating")}
 
           {renderInputField(
-            "Description",
-            "description",
+            "Review",
+            "Review",
             "Write your review for this course",
             4
           )}

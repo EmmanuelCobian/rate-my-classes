@@ -21,18 +21,21 @@ const classColumns = [
   "AverageGrade TEXT",
   "Prerequisites TEXT",
 ];
+
 const reviewColumns = [
+  "Attendance TEXT",
   "Author TEXT",
   "CourseCode TEXT",
-  "Review TEXT",
   "Difficulty INT",
+  "Grade TEXT",
   "Interest INT",
+  "OverallRating INT",
   "Professor TEXT",
+  "Review TEXT",
   "Term TEXT",
-  "Attendance TEXT",
   "Textbook TEXT",
-  "ThumbsUp INT",
   "ThumbsDown INT",
+  "ThumbsUp INT",
 ];
 const departments = ["compsci", "physics", "eecs", "data", "math"];
 
@@ -104,52 +107,60 @@ app.post("/populate-tables", (req, res) => {
 });
 
 app.post("/add-review", (req, res) => {
+  res.send("POST Request Called");
   const {
+    Attendance,
     Author,
     CourseCode,
-    Review,
     Difficulty,
+    Grade,
     Interest,
+    OverallRating,
     Professor,
+    Review,
     Term,
-    Attendance,
     Textbook,
-    ThumbsUp,
     ThumbsDown,
+    ThumbsUp,
   } = req.query;
   const sql = `
     INSERT INTO reviews (
-      Author,
-      CourseCode,
-      Review,
-      Difficulty,
-      Interest,
-      Professor,
-      Term,
-      Attendance,
-      Textbook,
-      ThumbsUp,
-      ThumbsDown
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    Attendance,
+    Author,
+    CourseCode,
+    Difficulty,
+    Grade,
+    Interest,
+    OverallRating,
+    Professor,
+    Review,
+    Term,
+    Textbook,
+    ThumbsDown,
+    ThumbsUp,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.run(
     sql,
     [
+      Attendance,
       Author,
       CourseCode,
-      Review,
       Difficulty,
+      Grade,
       Interest,
+      OverallRating,
       Professor,
+      Review,
       Term,
-      Attendance,
       Textbook,
-      ThumbsUp,
       ThumbsDown,
+      ThumbsUp,
     ],
     (err) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ error: err.message });
       }
 

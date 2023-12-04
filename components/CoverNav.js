@@ -43,7 +43,7 @@ export default function CoverNav() {
             <i className="bi bi-instagram"></i>
           </a>
           <span className="fs-3 fw-semibold">RateMyClasses</span>
-          = <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Nav.Link href="#home">

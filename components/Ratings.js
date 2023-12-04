@@ -4,30 +4,45 @@ import styled from "styled-components";
 const Rating = styled.p`
   font-weight: bold;
   font-size: 1.25rem;
+  margin: 0;
+`;
+
+const RatingsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+`;
+
+const RatingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
 `;
 
 export default function Ratings(props) {
   return (
-    <div className={styles.container}>
-      <div className={styles.ratingContainer}>
+    <RatingsContainer>
+      <RatingWrapper>
         <Rating>{props.difficulty}</Rating>
         <p>Difficulty</p>
-      </div>
+      </RatingWrapper>
 
-      <div className={styles.ratingContainer}>
+      <RatingWrapper>
         <Rating>{props.interest}</Rating>
         <p>Interest</p>
-      </div>
+      </RatingWrapper>
 
-      <div className={styles.ratingContainer}>
+      <RatingWrapper>
         <Rating>{props.averageGrade}</Rating>
-        <p>Average Grade</p>
-      </div>
+        <p>Avg Grade</p>
+      </RatingWrapper>
 
-      <div className={styles.ratingContainer}>
-        <Rating>{props.units}</Rating>
+      <RatingWrapper>
+        <Rating>{props.units.split(" ")[0]}</Rating>
         <p>Units</p>
-      </div>
-    </div>
+      </RatingWrapper>
+    </RatingsContainer>
   );
 }
