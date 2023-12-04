@@ -9,17 +9,22 @@ import { useEffect, useState } from "react";
 const InfoContainer = styled.div`
   display: flex;
   padding: 3rem;
-  justify-content: space-evenly;
-  width: 1420px;
+  justify-content: space-between;
+  width: 1300px;
   margin: auto;
+`;
+
+const ReviewTitle = styled.h3`
+  font-weight: bold;
 `;
 
 const ReviewsContainer = styled.div`
   display: flex;
   padding: 3rem;
   flex-direction: column;
+  gap: 2rem;
   align-items: flex-start;
-  width: 1420px;
+  width: 1300px;
   margin: auto;
 `;
 
@@ -80,6 +85,7 @@ export default function ClassPage() {
         </InfoContainer>
 
         <ReviewsContainer>
+          <ReviewTitle>Reviews</ReviewTitle>
           {reviews.map((review, index) => {
             return (
               <StudentReview
