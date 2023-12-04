@@ -1,6 +1,9 @@
 import CoverNav from "@/components/Coverpage";
 import styled from "styled-components";
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import { useRouter } from 'next/router';
+
 
 // #region CSS
 const PageContainer = styled.div`
@@ -77,6 +80,16 @@ const termOptions = [
 ];
 
 export default function CreateReviewPage() {
+
+  const {query} = useRouter();
+
+  // const router = useRouter();
+  // const { courseName } = router.query;
+
+  // if (!courseName) {
+  //   return <h1> Couldn't find it bro</h1>
+  // }
+
   // State to manage form inputs
   const [formData, setFormData] = useState({
     professor: "",
@@ -118,7 +131,7 @@ export default function CreateReviewPage() {
               type="radio"
               value="yes"
             />
-            <label className="form-check-label">Yes</label>
+            <label>Yes</label>
           </div>
 
           <div className="form-check form-check-inline">
@@ -130,7 +143,7 @@ export default function CreateReviewPage() {
               type="radio"
               value="no"
             />
-            <label className="form-check-label">No</label>
+            <label>No</label>
           </div>
         </Row>
       </QuestionAndAnswer>
@@ -160,7 +173,7 @@ export default function CreateReviewPage() {
   const renderSlider = (label, name) => {
     return (
       <QuestionAndAnswer>
-        <label className="form-label">{label + ": " + formData[name]}</label>
+        <label>{label + ": " + formData[name]}</label>
         <input
           type="range"
           className="form-range"
@@ -194,7 +207,7 @@ export default function CreateReviewPage() {
     <>
       <CoverNav />
       <PageContainer>
-        <Title>Review for CS 61B</Title>
+        <Title>{`Review for ${query.courseNumber}: ${query.courseName}`}</Title>
         <br></br>
         <Form onSubmit={handleSubmit}>
           {renderInputField(
@@ -219,11 +232,47 @@ export default function CreateReviewPage() {
             4
           )}
 
-          <button type="submit" className="btn btn-primary">
+
+          <Button type="submit" className="btn btn-dark">
             Submit
-          </button>
+          </Button>
         </Form>
       </PageContainer>
     </>
   );
 }
+
+// export async function getStaticPaths() {
+//   // Return a list of possible value for id
+//   const paths = getAllPostIds();
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+// export async function getStaticProps({ params }) {
+//   const postData = getPostData(params.id);
+//   return {
+//     props: {
+//       postData,
+//     },
+//   };
+// }
+
+// export async function getStaticPaths() {
+
+// }
+
+// export async function getStaticProps({ params }) {
+//   const { courseName } = params;
+
+//   // Fetch product data based on productId
+
+//   return {
+//     props: {
+//       courseName,
+//       // Other product data
+//     },
+//   };
+// }
