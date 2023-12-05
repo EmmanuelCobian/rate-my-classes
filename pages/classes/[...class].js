@@ -109,7 +109,6 @@ export default function ClassPage() {
     data.MandatoryTextbook = numTextBookYes > 0 ? "Yes" : "No";
     setAggregatedData(data);
 
-    console.log(data.RatingDistribution);
   }, [reviews]);
 
   const renderLoadingModal = () => {

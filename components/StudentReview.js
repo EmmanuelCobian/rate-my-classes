@@ -180,8 +180,7 @@ const StudentReview = ({
               </Card.Text>
               <Card.Text className="mb-0">
                 Attendance: <strong>{attendanceNeeded}</strong> Textbook:{" "}
-                <strong>{textbookNeeded}</strong> Author:{" "}
-                <strong>{author}</strong>
+                <strong>{textbookNeeded}</strong>
               </Card.Text>
               <Card.Text className="mt-3">{classRev}</Card.Text>
             </Container>
