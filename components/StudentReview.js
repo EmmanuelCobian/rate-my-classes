@@ -2,6 +2,7 @@ import Card from "react-bootstrap/Card";
 import { Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import styled from "styled-components";
+import { useSession } from "next-auth/react";
 
 const ReviewIcons = styled.i`
   &:hover {
@@ -22,11 +23,15 @@ const StudentReview = ({
   helpfulCount,
   notHelpfulCount,
   courseCode,
+  likedBy,
+  dislikedBy
 }) => {
+  const { data: session, status } = useSession();
+  const userName = status == "authenticated" ? session.user?.email : "Anonymous";
   const [liked, setLiked] = useState(helpfulCount);
   const [disliked, setDisliked] = useState(notHelpfulCount);
-  const [likedIcon, setLikedIcon] = useState("");
-  const [dislikedIcon, setDislikedIcon] = useState("");
+  const [likedIcon, setLikedIcon] = useState(likedBy.includes(userName) ? "-fill" : "");
+  const [dislikedIcon, setDislikedIcon] = useState(dislikedBy.includes(userName) ? "-fill" : "");
 
   const handleDbUpdate = (data) => {
     const queryString = Object.entries(data)
@@ -57,25 +62,35 @@ const StudentReview = ({
 
   const handleLiked = () => {
     if (likedIcon != "-fill") {
+      likedBy.push(userName)
       let updatedInfo = {
         Author: author,
         CourseCode: courseCode,
         ThumbsUp: liked + 1,
         ThumbsDown: disliked,
+        LikedBy: likedBy.join(","),
+        DislikedBy: dislikedBy.join(",")
       };
+      
+      if (dislikedIcon == "-fill") {
+        dislikedBy.splice(dislikedBy.indexOf(userName), 1)
+        updatedInfo.ThumbsDown = Math.max(disliked - 1, 0)
+        updatedInfo.DislikedBy = dislikedBy.join(',')
+        setDislikedIcon("");
+        setDisliked((prev) => Math.max(prev - 1, 0));      
+      }
       handleDbUpdate(updatedInfo);
       setLikedIcon("-fill");
       setLiked((prev) => prev + 1);
-
-      if (dislikedIcon == "-fill") {
-        handleDisliked();
-      }
     } else {
+      likedBy.splice(likedBy.indexOf(userName), 1)
       let updatedInfo = {
         Author: author,
         CourseCode: courseCode,
         ThumbsUp: Math.max(liked - 1, 0),
         ThumbsDown: disliked,
+        LikedBy: likedBy.join(","),
+        DislikedBy: dislikedBy.join(",")
       };
       handleDbUpdate(updatedInfo)
       setLikedIcon("");
@@ -84,24 +99,35 @@ const StudentReview = ({
   };
   const handleDisliked = () => {
     if (dislikedIcon != "-fill") {
+      dislikedBy.push(userName)
       let updatedInfo = {
         Author: author,
         CourseCode: courseCode,
         ThumbsUp: liked,
         ThumbsDown: disliked + 1,
+        LikedBy: likedBy.join(","),
+        DislikedBy: dislikedBy.join(",")
       };
+      
+      if (likedIcon == "-fill") {
+        likedBy.splice(likedBy.indexOf(userName), 1)
+        updatedInfo.ThumbsUp = Math.max(liked - 1, 0)
+        updatedInfo.LikedBy = likedBy.join(",")
+        setLikedIcon("");
+        setLiked((prev) => Math.max(prev - 1, 0));      
+      }
       handleDbUpdate(updatedInfo)
       setDislikedIcon("-fill");
       setDisliked((prev) => prev + 1);
-      if (likedIcon == "-fill") {
-        handleLiked();
-      }
     } else {
+      dislikedBy.splice(dislikedBy.indexOf(userName), 1)
       let updatedInfo = {
         Author: author,
         CourseCode: courseCode,
         ThumbsUp: liked,
         ThumbsDown: Math.max(disliked - 1, 0),
+        LikedBy: likedBy.join(","),
+        DislikedBy: dislikedBy.join(",")
       };
       handleDbUpdate(updatedInfo)
       setDislikedIcon("");
@@ -119,6 +145,7 @@ const StudentReview = ({
         border: "none",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
       }}
+      className="my-4"
     >
       <Row className="h-100 w-100">
         <Col

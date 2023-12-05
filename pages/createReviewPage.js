@@ -113,7 +113,7 @@ const ratingToColorReverse = {
 
 export default function CreateReviewPage() {
   const { data: session, status } = useSession();
-  const userName = session?.user?.name;
+  const userName = session?.user?.email;
   const router = useRouter();
   const query = router.query;
 

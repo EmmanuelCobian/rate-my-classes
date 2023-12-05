@@ -147,6 +147,8 @@ export default function ClassPage() {
                   diffRating={review.Difficulty}
                   intRating={review.Interest}
                   courseCode={classData.CourseCode}
+                  likedBy={review.LikedBy.length == 0 ? [] : review.LikedBy.split(",")}
+                  dislikedBy={review.DislikedBy.length == 0 ? [] : review.DislikedBy.split(",")}
                 />
               );
             })}

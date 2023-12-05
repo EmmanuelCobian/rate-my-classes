@@ -36,6 +36,8 @@ const reviewColumns = [
   "Textbook TEXT",
   "ThumbsDown INT",
   "ThumbsUp INT",
+  "LikedBy TEXT",
+  "DislikedBy TEXT"
 ];
 const departments = ["compsci", "physics", "eecs", "data", "math"];
 
@@ -141,8 +143,10 @@ app.post("/add-review", (req, res) => {
     Term,
     Textbook,
     ThumbsDown,
-    ThumbsUp
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ThumbsUp,
+    LikedBy,
+    DislikedBy
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.run(
@@ -161,6 +165,8 @@ app.post("/add-review", (req, res) => {
       Textbook,
       ThumbsDown,
       ThumbsUp,
+      "",
+      ""
     ],
     (err) => {
       if (err) {
@@ -182,14 +188,18 @@ app.post("/update-review-likes", (req, res) => {
     CourseCode,
     ThumbsDown,
     ThumbsUp,
+    LikedBy,
+    DislikedBy,
   } = req.query;
   const sql = `
     UPDATE reviews SET 
     ThumbsDown = ?,
-    ThumbsUp = ?
+    ThumbsUp = ?,
+    LikedBy = ?,
+    DislikedBy = ?
     WHERE Author = ? AND CourseCode = ?
   `;
-  db.run(sql, [ThumbsDown, ThumbsUp, Author, CourseCode], (err) => {
+  db.run(sql, [ThumbsDown, ThumbsUp, LikedBy, DislikedBy, Author, CourseCode], (err) => {
     if (err) {
       return res.status(500).json({ error: err.message })
     }
