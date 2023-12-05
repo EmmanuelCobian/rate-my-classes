@@ -6,27 +6,10 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingModal from "@/components/LoadingModal";
-
-const InfoContainer = styled.div`
-  display: flex;
-  padding: 3rem;
-  justify-content: space-between;
-  width: 1300px;
-  margin: auto;
-`;
+import { Row, Col, Container } from "react-bootstrap";
 
 const ReviewTitle = styled.h3`
   font-weight: bold;
-`;
-
-const ReviewsContainer = styled.div`
-  display: flex;
-  padding: 3rem;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: flex-start;
-  width: 1300px;
-  margin: auto;
 `;
 
 export default function ClassPage() {
@@ -108,7 +91,6 @@ export default function ClassPage() {
     data.MandatoryLecture = numLectureYes > 0 ? "Yes" : "No";
     data.MandatoryTextbook = numTextBookYes > 0 ? "Yes" : "No";
     setAggregatedData(data);
-
   }, [reviews]);
 
   const renderLoadingModal = () => {
@@ -117,50 +99,60 @@ export default function ClassPage() {
 
   const renderClassInfoAndReviews = () => {
     return (
-      <div>
+      <>
         <CoverNav />
-        <InfoContainer>
-          <ClassInfoContainer
-            courseCode={classData.CourseCode}
-            title={classData.Title}
-            averageGrade={classData.AverageGrade}
-            units={classData.Units}
-            prerequisites={classData.Prerequisites}
-            overallRating={aggregatedData.OverallRating ?? "N/A"}
-            difficulty={aggregatedData.Difficulty ?? "N/A"}
-            interest={aggregatedData.Interest ?? "N/A"}
-            mandatoryLecture={aggregatedData.MandatoryLecture ?? "N/A"}
-            mandatoryTextbook={aggregatedData.MandatoryTextbook ?? "N/A"}
-          ></ClassInfoContainer>
-          <DescriptionAndDistribution
-            description={classData.Description}
-            distribution={aggregatedData.RatingDistribution ?? "N/A"}
-          ></DescriptionAndDistribution>
-        </InfoContainer>
+        <Container>
+          <Row>
+            <Col className="mt-3">
+              <Container>
+                <ClassInfoContainer
+                  courseCode={classData.CourseCode}
+                  title={classData.Title}
+                  averageGrade={classData.AverageGrade}
+                  units={classData.Units}
+                  prerequisites={classData.Prerequisites}
+                  overallRating={aggregatedData.OverallRating ?? "N/A"}
+                  difficulty={aggregatedData.Difficulty ?? "N/A"}
+                  interest={aggregatedData.Interest ?? "N/A"}
+                  mandatoryLecture={aggregatedData.MandatoryLecture ?? "N/A"}
+                  mandatoryTextbook={aggregatedData.MandatoryTextbook ?? "N/A"}
+                ></ClassInfoContainer>
+              </Container>
+            </Col>
+            <Col className="mt-3">
+              <Container>
+                <DescriptionAndDistribution
+                  description={classData.Description}
+                  distribution={aggregatedData.RatingDistribution ?? "N/A"}
+                ></DescriptionAndDistribution>
+              </Container>
+            </Col>
+          </Row>
 
-        <ReviewsContainer>
-          <ReviewTitle>Reviews</ReviewTitle>
-          {reviews.map((review, index) => {
-            return (
-              <StudentReview
-                key={index}
-                author={review.Author}
-                profe={review.Professor}
-                term={review.Term}
-                grade={review.Grade}
-                attendanceNeeded={review.Attendance}
-                textbookNeeded={review.Textbook}
-                classRev={review.Review}
-                helpfulCount={review.ThumbsUp}
-                notHelpfulCount={review.ThumbsDown}
-                diffRating={review.Difficulty}
-                intRating={review.Interest}
-                courseCode={classData.CourseCode}
-              />
-            );
-          })}
-        </ReviewsContainer>
-      </div>
+          <Container className="my-5">
+            <ReviewTitle>Reviews</ReviewTitle>
+            {reviews.map((review, index) => {
+              return (
+                <StudentReview
+                  key={index}
+                  author={review.Author}
+                  profe={review.Professor}
+                  term={review.Term}
+                  grade={review.Grade}
+                  attendanceNeeded={review.Attendance}
+                  textbookNeeded={review.Textbook}
+                  classRev={review.Review}
+                  helpfulCount={review.ThumbsUp}
+                  notHelpfulCount={review.ThumbsDown}
+                  diffRating={review.Difficulty}
+                  intRating={review.Interest}
+                  courseCode={classData.CourseCode}
+                />
+              );
+            })}
+          </Container>
+        </Container>
+      </>
     );
   };
 
