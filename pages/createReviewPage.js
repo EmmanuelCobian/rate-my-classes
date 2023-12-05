@@ -229,7 +229,7 @@ export default function CreateReviewPage() {
         <Row>
           <div className="form-check form-check-inline">
             <input
-              checked={formData[name] === "yes"}
+              checked={formData[name] === "Yes"}
               className={`${styles.customRadio}`}
               name={name}
               onChange={handleInputChange}
@@ -241,7 +241,7 @@ export default function CreateReviewPage() {
 
           <div className="form-check form-check-inline">
             <input
-              checked={formData[name] === "no"}
+              checked={formData[name] === "No"}
               className={`${styles.customRadio}`}
               name={name}
               onChange={handleInputChange}
@@ -277,7 +277,7 @@ export default function CreateReviewPage() {
 
   const renderSlider = (label, name) => {
     const color =
-      name == "difficulty"
+      name == "Difficulty"
         ? ratingToColorReverse[formData[name]]
         : ratingToColor[formData[name]];
     return (
