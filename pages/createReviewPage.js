@@ -230,7 +230,8 @@ export default function CreateReviewPage() {
       })
       .then((data) => {
         console.log("Success:", data);
-        router.push(`/classes/${query.courseCode}`);
+        let search = query.courseCode.split(" ");
+        router.push(`/classes/${search.join("/")}`);
       })
       .catch((error) => {
         console.error("Error:", error);
