@@ -12,7 +12,7 @@ const Description = styled.p`
 const DistributionContainer = styled.div`
   padding: 1rem;
   width: 50ch;
-  height: 260px;
+  height: auto;
   background: lightgray;
   box-shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)";
   border-radius: 10px;
@@ -27,11 +27,7 @@ export default function DescriptionAndDistribution(props) {
       </div>
       <DistributionContainer>
         <Title>Overall Rating Distribution</Title>
-        <Distribution rating="5"></Distribution>
-        <Distribution rating="4"></Distribution>
-        <Distribution rating="3"></Distribution>
-        <Distribution rating="2"></Distribution>
-        <Distribution rating="1"></Distribution>
+        <Distribution ratingCounts={props.ratingCounts}></Distribution>
       </DistributionContainer>
     </div>
   );
