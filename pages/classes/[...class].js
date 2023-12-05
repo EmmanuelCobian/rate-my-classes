@@ -91,6 +91,7 @@ export default function ClassPage() {
             return (
               <StudentReview
                 key={index}
+                author={review.Author}
                 profe={review.Professor}
                 term={review.Term}
                 grade={review.Grade}
@@ -101,6 +102,7 @@ export default function ClassPage() {
                 notHelpfulCount={review.ThumbsDown}
                 diffRating={review.Difficulty}
                 intRating={review.Interest}
+                courseCode={classData.CourseCode}
               />
             );
           })}
