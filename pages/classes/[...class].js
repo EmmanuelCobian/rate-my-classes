@@ -30,17 +30,17 @@ const ReviewsContainer = styled.div`
 `;
 
 export default function ClassPage() {
-  const { query } = useRouter();
+  const router = useRouter();
   const [classData, setClassData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
   const [aggregatedData, setAggregatedData] = useState(null);
 
   useEffect(() => {
-    if (!query) return;
+    if (!router.isReady) return;
 
-    const department = query.class[0];
-    const courseCode = query.class.join(" ");
+    const department = router.query.class[0];
+    const courseCode = router.query.class.join(" ");
     // Grabbing course info
     fetch(`http://localhost:2000/${department}?code=${courseCode}`)
       .then((response) => response.json())
@@ -63,7 +63,7 @@ export default function ClassPage() {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [query]);
+  }, [router.isReady]);
 
   useEffect(() => {
     if (!reviews) return;
