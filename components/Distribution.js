@@ -19,44 +19,22 @@ function countsToPercents(counts) {
 export default function Distribution(props) {
   const percents = countsToPercents(props.ratingCounts);
 
+  const renderRow = (label) => (
+    <Row className='pb-3'>
+      <Col xs='auto'>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>{label}</div>
+      </Col>
+      <Col xs={6} style={{ width: percents[label], backgroundColor: "black" }}></Col>
+    </Row>
+  );
+
   return (
     <Container>
-      <Row className='pb-3'>
-        <Col xs='auto'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>5</div>
-        </Col>
-        <Col xs={6} style={{ width: percents[5], backgroundColor: "black" }}></Col>
-      </Row>
-
-      <Row className='pb-3'>
-        <Col xs='auto'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>4</div>
-        </Col>
-        <Col xs={6} style={{ width: percents[4], backgroundColor: "black" }}></Col>
-      </Row>
-
-      <Row className='pb-3'>
-        <Col xs='auto'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>3</div>
-        </Col>
-        <Col xs={6} style={{ width: percents[3], backgroundColor: "black" }}></Col>
-      </Row>
-
-      <Row className='pb-3'>
-        <Col xs='auto'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>2</div>
-        </Col>
-        <Col xs={6} style={{ width: percents[2], backgroundColor: "black" }}></Col>
-      </Row>
-
-      <Row>
-        <Col xs='auto'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>1</div>
-        </Col>
-        <Col xs={6} style={{ width: percents[1], backgroundColor: "black" }}></Col>
-      </Row>
-
-      
+      {renderRow(5)}
+      {renderRow(4)}
+      {renderRow(3)}
+      {renderRow(2)}
+      {renderRow(1)}
     </Container>
   );
 }
