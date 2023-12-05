@@ -42,6 +42,50 @@ const QuestionAndAnswer = styled.div`
   gap: 1rem;
 `;
 
+const ErrorWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+`;
+
+const Error = styled.p`
+  color: red;
+`;
+
+const SubmittingBackground = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background: rgba(211, 211, 211, 0.75);
+  z-index: 4;
+`;
+
+const SubmittingModal = styled.div`
+  width: 200px;
+  height: 150px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 50ch;
+  height: 260px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
 // #endregion
 
 const gradeOptions = [
@@ -103,6 +147,9 @@ export default function CreateReviewPage() {
   const router = useRouter();
   const query = router.query;
 
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     Attendance: null,
     Author: status == "authenticated" ? userName : "Anonymous",
@@ -128,8 +175,10 @@ export default function CreateReviewPage() {
     });
   }, [query]);
 
-  // Handle input changes
+  // Handle input changes and clear error if there is one.
   const handleInputChange = (e) => {
+    setError(null);
+
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -139,6 +188,23 @@ export default function CreateReviewPage() {
 
   const handlePostRequest = async (e) => {
     e.preventDefault();
+
+    // Check if all fields are filled out.
+    const emptyFields = Object.entries(formData).filter(
+      ([key, value]) => value === null || value === ""
+    );
+
+    if (emptyFields.length > 0) {
+      setError("Please fill out all fields.");
+      window.scroll({
+        bottom: document.body.scrollHeight, // or document.scrollingElement || document.body
+        left: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
 
     const queryString = Object.entries(formData)
       .map(
@@ -153,17 +219,43 @@ export default function CreateReviewPage() {
       method: "POST",
     })
       .then((response) => {
+        setIsSubmitting(false);
         if (!response.ok) {
+          setError(
+            "There was a problem submitting your review. Please try again later."
+          );
           throw new Error("Network response was not ok");
         }
         return response.json();
       })
       .then((data) => {
         console.log("Success:", data);
+        router.push(`/classes/${query.courseCode}`);
       })
       .catch((error) => {
         console.error("Error:", error);
+        setError(error);
       });
+  };
+
+  const renderError = () => {
+    const errorMsg = error ?? "";
+    return (
+      <ErrorWrapper>
+        <Error>{errorMsg}</Error>
+      </ErrorWrapper>
+    );
+  };
+
+  const renderSubmittingModal = () => {
+    return (
+      <SubmittingBackground>
+        <SubmittingModal>
+          <div>Submitting Review</div>
+          <div className="spinner-border text-dark" role="status" />
+        </SubmittingModal>
+      </SubmittingBackground>
+    );
   };
 
   const renderRadioQuestion = (label, name) => {
@@ -295,7 +387,13 @@ export default function CreateReviewPage() {
             Submit
           </Button>
         </Form>
+
+        {renderError()}
+        <br></br>
+        <br></br>
       </PageContainer>
+
+      {isSubmitting && renderSubmittingModal()}
     </>
   );
 }
