@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import styles from "@/styles/CreateReview.module.css";
+import LoadingModal from "@/components/LoadingModal";
 
 // #region CSS
 const PageContainer = styled.div`
@@ -53,37 +54,6 @@ const ErrorWrapper = styled.div`
 
 const Error = styled.p`
   color: red;
-`;
-
-const SubmittingBackground = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background: rgba(211, 211, 211, 0.75);
-  z-index: 4;
-`;
-
-const SubmittingModal = styled.div`
-  width: 200px;
-  height: 150px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 50ch;
-  height: 260px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 // #endregion
@@ -249,14 +219,7 @@ export default function CreateReviewPage() {
   };
 
   const renderSubmittingModal = () => {
-    return (
-      <SubmittingBackground>
-        <SubmittingModal>
-          <div>Submitting Review</div>
-          <div className="spinner-border text-dark" role="status" />
-        </SubmittingModal>
-      </SubmittingBackground>
-    );
+    return <LoadingModal text="Submitting review..." />;
   };
 
   const renderRadioQuestion = (label, name) => {
@@ -271,7 +234,7 @@ export default function CreateReviewPage() {
               name={name}
               onChange={handleInputChange}
               type="radio"
-              value="yes"
+              value="Yes"
             />
             <label>Yes</label>
           </div>
@@ -283,7 +246,7 @@ export default function CreateReviewPage() {
               name={name}
               onChange={handleInputChange}
               type="radio"
-              value="no"
+              value="No"
             />
             <label>No</label>
           </div>

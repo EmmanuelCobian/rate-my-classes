@@ -5,6 +5,7 @@ import DescriptionAndDistribution from "@/components/DescriptionAndDistribution"
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import LoadingModal from "@/components/LoadingModal";
 
 const InfoContainer = styled.div`
   display: flex;
@@ -33,11 +34,13 @@ export default function ClassPage() {
   const [classData, setClassData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
+  const [aggregatedData, setAggregatedData] = useState(null);
+
   useEffect(() => {
     if (!query) return;
 
-    const department = query.class[0]
-    const courseCode = query.class.join(' ')
+    const department = query.class[0];
+    const courseCode = query.class.join(" ");
     // Grabbing course info
     fetch(`http://localhost:2000/${department}?code=${courseCode}`)
       .then((response) => response.json())
@@ -47,7 +50,7 @@ export default function ClassPage() {
     fetch(`http://localhost:2000/get-class-reviews?code=${courseCode}`)
       .then((response) => {
         if (!response.ok && response.status == 400) {
-          return []
+          return [];
         } else if (!response.ok && response.status == 500) {
           throw new Error("Network response was not ok");
         } else {
@@ -62,6 +65,57 @@ export default function ClassPage() {
       });
   }, [query]);
 
+  useEffect(() => {
+    if (!reviews) return;
+
+    let numLectureYes = 0;
+    let numTextBookYes = 0;
+
+    let data = {
+      OverallRating: 0,
+      Difficulty: 0,
+      Interest: 0,
+      MandatoryLecture: "",
+      MandatoryTextbook: "",
+      RatingDistribution: {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      },
+    };
+
+    reviews.forEach((review) => {
+      data.OverallRating += review.OverallRating;
+      data.Difficulty += review.Difficulty;
+      data.Interest += review.Interest;
+      data.RatingDistribution[review.OverallRating] += 1;
+
+      numLectureYes =
+        review.Attendance.toUpperCase() === "YES"
+          ? numLectureYes + 1
+          : numLectureYes - 1;
+      numTextBookYes =
+        review.Textbook.toUpperCase() === "YES"
+          ? numTextBookYes + 1
+          : numTextBookYes - 1;
+    });
+
+    data.OverallRating /= reviews.length;
+    data.Difficulty /= reviews.length;
+    data.Interest /= reviews.length;
+    data.MandatoryLecture = numLectureYes > 0 ? "Yes" : "No";
+    data.MandatoryTextbook = numTextBookYes > 0 ? "Yes" : "No";
+    setAggregatedData(data);
+
+    console.log(data.RatingDistribution);
+  }, [reviews]);
+
+  const renderLoadingModal = () => {
+    return <LoadingModal text="Loading class data..." />;
+  };
+
   const renderClassInfoAndReviews = () => {
     return (
       <div>
@@ -73,15 +127,15 @@ export default function ClassPage() {
             averageGrade={classData.AverageGrade}
             units={classData.Units}
             prerequisites={classData.Prerequisites}
-            overallRating={classData.OverallRating ?? "N/A"}
-            difficulty={classData.Diffculty ?? "N/A"}
-            interest={classData.Interest ?? "N/A"}
-            mandatoryLecture={classData.mandatoryLecture ?? "N/A"}
-            mandatoryTextbook={classData.mandatoryTextbook ?? "N/A"}
-            demand={classData.Demand ?? "N/A"}
+            overallRating={aggregatedData.OverallRating ?? "N/A"}
+            difficulty={aggregatedData.Difficulty ?? "N/A"}
+            interest={aggregatedData.Interest ?? "N/A"}
+            mandatoryLecture={aggregatedData.MandatoryLecture ?? "N/A"}
+            mandatoryTextbook={aggregatedData.MandatoryTextbook ?? "N/A"}
           ></ClassInfoContainer>
           <DescriptionAndDistribution
             description={classData.Description}
+            distribution={aggregatedData.RatingDistribution ?? "N/A"}
           ></DescriptionAndDistribution>
         </InfoContainer>
 
@@ -109,5 +163,5 @@ export default function ClassPage() {
     );
   };
 
-  return <>{classData ? renderClassInfoAndReviews() : <div>Loading...</div>}</>;
+  return <>{classData ? renderClassInfoAndReviews() : renderLoadingModal()}</>;
 }
