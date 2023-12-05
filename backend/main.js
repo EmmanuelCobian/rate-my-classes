@@ -176,6 +176,27 @@ app.post("/add-review", (req, res) => {
   );
 });
 
+app.post("/update-review-likes", (req, res) => {
+  const {
+    Author,
+    CourseCode,
+    ThumbsDown,
+    ThumbsUp,
+  } = req.query;
+  const sql = `
+    UPDATE reviews SET 
+    ThumbsDown = ?,
+    ThumbsUp = ?
+    WHERE Author = ? AND CourseCode = ?
+  `;
+  db.run(sql, [ThumbsDown, ThumbsUp, Author, CourseCode], (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message })
+    }
+    return res.json({ success: true, message: `Review from ${Author} and for ${CourseCode} was updated successfully`})
+  })
+})
+
 app.get("/COMPSCI", (req, res) => {
   const code = req.query.code;
   const sql =
