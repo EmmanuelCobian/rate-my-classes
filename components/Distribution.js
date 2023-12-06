@@ -19,14 +19,29 @@ function countsToPercents(counts) {
 export default function Distribution(props) {
   const percents = countsToPercents(props.ratingCounts);
 
-  const renderRow = (label) => (
-    <Row className='pb-3'>
-      <Col xs='auto'>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>{label}</div>
-      </Col>
-      <Col xs={6} style={{ width: percents[label], backgroundColor: "black" }}></Col>
-    </Row>
-  );
+  const renderRow = (label) => {
+    let currWidth = percents[label]
+    console.log(currWidth)
+  
+    if (currWidth == '0%') {
+      return (
+        <Row className='pb-3'>
+          <Col xs='auto'>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>{label}</div>
+          </Col>
+        </Row>
+      );
+    } else {
+      return (
+        <Row className='pb-3'>
+          <Col xs='auto'>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '10px', height: '30px', fontWeight: 'bolder' }}>{label}</div>
+          </Col>
+          <Col xs={6} style={{ width: percents[label], height: '30px', maxWidth: props.maxWidth, backgroundColor: "black" }}></Col>
+        </Row>
+      );
+    }
+  }
 
   return (
     <Container>
