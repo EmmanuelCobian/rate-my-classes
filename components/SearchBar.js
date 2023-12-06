@@ -79,7 +79,7 @@ export default function SearchBar() {
     if (e.key != "Enter") {
       return;
     }
-    let search = e.target.value.split(" ");
+    let search = e.target.value.toUpperCase().split(" ");
     if (await testIfExists(search)) {
       setValidInput(true);
       router.push(`/classes/${search.join("/")}`);

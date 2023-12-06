@@ -9,11 +9,6 @@ import SearchBar from "./SearchBar";
 export default function CoverNav() {
   const [navbarVariant, setNavbarVariant] = useState("dark");
 
-  const handleClick = () => {
-    const newNavbarVariant = navbarVariant === "dark" ? "light" : "dark";
-    setNavbarVariant(newNavbarVariant);
-  };
-
   return (
     <div>
       <Navbar
@@ -24,15 +19,15 @@ export default function CoverNav() {
       >
         <Container>
           <Navbar.Brand href="/">
-              <i className="bi bi-facebook"></i>
-              <i className="bi bi-twitter mx-3"></i>
-              <i className="bi bi-instagram me-4"></i>
+            <i className="bi bi-facebook"></i>
+            <i className="bi bi-twitter mx-3"></i>
+            <i className="bi bi-instagram me-4"></i>
             <span className="fs-3 fw-semibold">RateMyClasses</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <SearchBar />
             <Nav className="ms-auto">
-              <SearchBar />
               <Nav.Link href="/">
                 <Button variant="light">Home</Button>
               </Nav.Link>
