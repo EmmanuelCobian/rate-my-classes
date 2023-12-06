@@ -12,6 +12,8 @@ const RatingsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 30px;
+  margin-top: 1em;
+  margin-bottom: 1em;
 `;
 
 const RatingWrapper = styled.div`
