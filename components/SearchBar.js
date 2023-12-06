@@ -80,6 +80,7 @@ export default function SearchBar() {
       return;
     }
     let search = e.target.value.toUpperCase().split(" ");
+    search[0] = search[0] == 'CS' ? 'COMPSCI' : search[0]
     if (await testIfExists(search)) {
       setValidInput(true);
       router.push(`/classes/${search.join("/")}`);
