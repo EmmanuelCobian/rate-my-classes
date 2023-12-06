@@ -17,7 +17,20 @@ export default function ClassPage() {
   const [classData, setClassData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
-  const [aggregatedData, setAggregatedData] = useState({});
+  const [aggregatedData, setAggregatedData] = useState({
+    OverallRating: 0,
+    Difficulty: 0,
+    Interest: 0,
+    MandatoryLecture: "N/A",
+    MandatoryTextbook: "N/A",
+    RatingDistribution: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
+  });
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -87,9 +100,10 @@ export default function ClassPage() {
 
     data.OverallRating /= reviews.length;
     data.Difficulty /= reviews.length;
-    data.Difficulty = Math.round((data.Difficulty + Number.EPSILON) * 100) / 100
+    data.Difficulty =
+      Math.round((data.Difficulty + Number.EPSILON) * 100) / 100;
     data.Interest /= reviews.length;
-    data.Interest = Math.round((data.Interest + Number.EPSILON) * 100) / 100
+    data.Interest = Math.round((data.Interest + Number.EPSILON) * 100) / 100;
     data.MandatoryLecture = numLectureYes > 0 ? "Yes" : "No";
     data.MandatoryTextbook = numTextBookYes > 0 ? "Yes" : "No";
     setAggregatedData(data);
@@ -100,6 +114,7 @@ export default function ClassPage() {
   };
 
   const renderClassInfoAndReviews = () => {
+
     return (
       <>
         <CoverNav />
@@ -113,11 +128,11 @@ export default function ClassPage() {
                   averageGrade={classData.AverageGrade}
                   units={classData.Units}
                   prerequisites={classData.Prerequisites}
-                  overallRating={aggregatedData.OverallRating ?? "N/A"}
-                  difficulty={aggregatedData.Difficulty ?? "N/A"}
-                  interest={aggregatedData.Interest ?? "N/A"}
-                  mandatoryLecture={aggregatedData.MandatoryLecture ?? "N/A"}
-                  mandatoryTextbook={aggregatedData.MandatoryTextbook ?? "N/A"}
+                  overallRating={aggregatedData.OverallRating}
+                  difficulty={aggregatedData.Difficulty}
+                  interest={aggregatedData.Interest}
+                  mandatoryLecture={aggregatedData.MandatoryLecture}
+                  mandatoryTextbook={aggregatedData.MandatoryTextbook}
                 ></ClassInfoContainer>
               </Container>
             </Col>
@@ -125,7 +140,7 @@ export default function ClassPage() {
               <Container>
                 <DescriptionAndDistribution
                   description={classData.Description}
-                  distribution={aggregatedData.RatingDistribution ?? "N/A"}
+                  distribution={aggregatedData.RatingDistribution}
                 ></DescriptionAndDistribution>
               </Container>
             </Col>
@@ -149,8 +164,14 @@ export default function ClassPage() {
                   diffRating={review.Difficulty}
                   intRating={review.Interest}
                   courseCode={classData.CourseCode}
-                  likedBy={review.LikedBy.length == 0 ? [] : review.LikedBy.split(",")}
-                  dislikedBy={review.DislikedBy.length == 0 ? [] : review.DislikedBy.split(",")}
+                  likedBy={
+                    review.LikedBy.length == 0 ? [] : review.LikedBy.split(",")
+                  }
+                  dislikedBy={
+                    review.DislikedBy.length == 0
+                      ? []
+                      : review.DislikedBy.split(",")
+                  }
                 />
               );
             })}

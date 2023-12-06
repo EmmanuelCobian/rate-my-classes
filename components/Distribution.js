@@ -10,7 +10,11 @@ function countsToPercents(counts) {
     total += counts[number];
   }
   for (let number in counts) {
-    percents[number] = (counts[number] / total * 100) + '%';
+    if (counts[number] == 0) {
+      percents[number] = '0%'
+    } else {
+      percents[number] = (counts[number] / total * 100) + '%';
+    }
   }
 
   return percents;
@@ -21,8 +25,7 @@ export default function Distribution(props) {
 
   const renderRow = (label) => {
     let currWidth = percents[label]
-    console.log(currWidth)
-  
+      
     if (currWidth == '0%') {
       return (
         <Row className='pb-3'>

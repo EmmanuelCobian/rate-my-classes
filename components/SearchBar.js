@@ -30,29 +30,52 @@ const SearchError = styled.p`
   display: ${({ isValidInput }) => (isValidInput ? "none" : "block")};
 `;
 
+const ListContainer = styled.div`
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  z-index: 100;
+`;
+
+const StyledListGroup = styled(ListGroup)`
+  position: absolute;
+  top: 100%; /* Adjust this value based on your design */
+  left: 0;
+  width: 100%;
+  z-index: 1;
+`;
+
 export default function SearchBar() {
-  const [departmentsAndCodes, setDepartmentsAndCodes] = useState(new Set());
+  const [departmentsAndCodes, setDepartmentsAndCodes] = useState([]);
 
   useEffect(() => {
       fetchData();
   }, []);
 
   const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:2000/get-all-departments-and-codes');
+    try {
+      const departments = ["COMPSCI", "MATH", "EECS", "DATA", "PHYSICS"];
+      
+      for (let department of departments) {
+        const response = await fetch(`http://localhost:2000/${department}`);
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
+  
         const data = await response.json();
-
-        setDepartmentsAndCodes(prevSet => new Set([...prevSet, ...Object.values(data).flat()]));
-        } catch (error) {
-        console.error('Fetch error:', error);
-        console.log(departmentsAndCodes);
+        
+        setDepartmentsAndCodes(prevDepartments => [
+          ...prevDepartments,
+          ...data.map(course => course.CourseCode)
+        ]);
       }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      console.log(departmentsAndCodes);
+    }
   };
-
+  
   const [userInput, setUserInput] = useState("");
 
 
@@ -117,25 +140,22 @@ export default function SearchBar() {
       <SearchError isValidInput={validInput}>
         That course doesn't exist, please try again.
       </SearchError>
-      <ListGroup style={{ width: '80%' }}>
-        {
-          [...departmentsAndCodes]
-            .filter(depAndCode => {
-              if (userInput === "") {
-                return null;
-              } else if (depAndCode.toLowerCase().includes(userInput.toLowerCase())) {
-                return depAndCode;
-              }
-            })
-            .slice(0, 5) // Take only the first five items
-            .map((depAndCode) => (
-              <ListGroupItem key={depAndCode} action onClick={() => autoComplete(depAndCode)}>
-                {depAndCode}
-              </ListGroupItem>
-            ))
-        }
-      </ListGroup>
-
+      {userInput && (
+        <ListContainer>
+          <StyledListGroup>
+            {
+              [...departmentsAndCodes]
+                .filter(depAndCode => depAndCode.toLowerCase().includes(userInput.toLowerCase()))
+                .slice(0, 3) // Take only the first three items
+                .map((depAndCode) => (
+                  <ListGroupItem key={depAndCode} action onClick={() => autoComplete(depAndCode)}>
+                    {depAndCode}
+                  </ListGroupItem>
+                ))
+            }
+          </StyledListGroup>
+        </ListContainer>
+      )}
     </div>
   );
 }
