@@ -27,7 +27,7 @@ export default function DescriptionAndDistribution(props) {
       </div>
       <DistributionContainer>
         <Title>Overall Rating Distribution</Title>
-        <Distribution ratingCounts={props.ratingCounts} maxWidth={'40ch'}></Distribution>
+        <Distribution ratingCounts={props.distribution} maxWidth={'40ch'}></Distribution>
       </DistributionContainer>
     </div>
   );

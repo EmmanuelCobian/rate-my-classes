@@ -17,7 +17,7 @@ export default function ClassPage() {
   const [classData, setClassData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
-  const [aggregatedData, setAggregatedData] = useState(null);
+  const [aggregatedData, setAggregatedData] = useState({});
 
   useEffect(() => {
     if (!router.isReady) return;
