@@ -1,9 +1,19 @@
-import { session } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-export default function CreateReview() {
-  if (session?.user.role === "admin") {
-    return <p>You can make reviews, welcome!</p>;
-  }
+export default function Signin() {
+  const router = useRouter();
+  const { status } = useSession();
+  const query = router.query;
 
-  return <p>Please sign in to make a user review!</p>;
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      void signIn("github");
+    } else if (status === "authenticated") {
+      void router.push("/createReviewPage?courseCode=" + query.courseCode + "&title=" + query.title);
+    }
+  }, [status]);
+
+  return <div></div>;
 }

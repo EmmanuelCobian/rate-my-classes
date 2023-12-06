@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import {useSession } from "next-auth/react";
 import styles from "@/styles/CreateReview.module.css";
 import LoadingModal from "@/components/LoadingModal";
 
@@ -110,6 +110,7 @@ const ratingToColorReverse = {
   4: "#FF8054",
   5: "#FF5733",
 };
+
 
 export default function CreateReviewPage() {
   const { data: session, status } = useSession();

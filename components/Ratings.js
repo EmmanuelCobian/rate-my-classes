@@ -19,6 +19,10 @@ const RatingWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0;
+  padding-top: 10px;
+  width: 75px;
+  height: 75px;
+  background-color: lightgrey;
 `;
 
 export default function Ratings(props) {
