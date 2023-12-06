@@ -52,7 +52,7 @@ export default function ClassInfoContainer(props) {
       </CourseInfo>
 
       <Link
-        href={`/createReviewPage?courseCode=${props.courseCode}&title=${props.title}`}
+        href={`/CreateReview?courseCode=${props.courseCode}&title=${props.title}`}
       >
         <Button className="btn btn-dark btn-lg">Add Review</Button>
       </Link>
