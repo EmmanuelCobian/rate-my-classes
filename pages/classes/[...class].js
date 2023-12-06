@@ -46,7 +46,7 @@ export default function ClassPage() {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [router.isReady]);
+  }, [router.isReady, router.query.class]);
 
   useEffect(() => {
     if (!reviews) return;

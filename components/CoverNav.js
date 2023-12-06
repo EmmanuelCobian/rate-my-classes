@@ -4,6 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import Login from "@/pages/login";
 import React, { useState } from "react";
+import SearchBar from "./SearchBar";
 
 export default function CoverNav() {
   const [navbarVariant, setNavbarVariant] = useState("dark");
@@ -31,18 +32,11 @@ export default function CoverNav() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              <SearchBar />
               <Nav.Link href="/">
-                <Button
-                  id="BrightnessButton"
-                  variant={navbarVariant}
-                  className="me-3"
-                  onClick={handleClick}
-                >
-                  <i className="bi bi-cloud-sun"></i>
-                </Button>
                 <Button variant="light">Home</Button>
               </Nav.Link>
-              <Nav.Link href="#link">
+              <Nav.Link>
                 <Login />
               </Nav.Link>
             </Nav>

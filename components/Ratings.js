@@ -22,8 +22,8 @@ const RatingWrapper = styled.div`
   align-items: center;
   margin: 0;
   padding-top: 10px;
-  width: 75px;
-  height: 75px;
+  width: 85px;
+  height: 80px;
   background-color: lightgrey;
 `;
 
