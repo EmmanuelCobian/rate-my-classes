@@ -320,6 +320,51 @@ app.get("/get-class-reviews", (req, res) => {
   });
 });
 
+app.get("/get-all-departments-and-codes", (req, res) => {
+  const sql = "SELECT name FROM sqlite_master WHERE type='table' AND name!='reviews';";
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    const departmentsAndCodesSet = new Set();
+
+    // Function to handle sending the response
+    const sendResponse = () => {
+      // Convert the Set to an array before sending the response
+      res.json([...departmentsAndCodesSet]);
+    };
+
+    rows.forEach(row => {
+      const tableName = row.name;
+      const department = tableName.toLowerCase();
+      const selectSql = `SELECT CourseCode FROM ${tableName}`;
+      
+      db.all(selectSql, [], (selectErr, selectRows) => {
+        if (selectErr) {
+          return res.status(500).json({ error: selectErr.message });
+        }
+
+        selectRows.forEach(selectRow => {
+          // Add each department and course code combination to the Set
+          departmentsAndCodesSet.add({
+            department,
+            courseCode: selectRow.CourseCode
+          });
+        });
+
+        // If this is the last table, send the response
+        if (departmentsAndCodesSet.size === rows.length) {
+          sendResponse();
+        }
+      });
+    });
+  });
+});
+
+
+
 app.get("/", (req, res) => {
   res.send("your request has been received");
 });
