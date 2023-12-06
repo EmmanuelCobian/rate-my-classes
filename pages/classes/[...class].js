@@ -87,7 +87,9 @@ export default function ClassPage() {
 
     data.OverallRating /= reviews.length;
     data.Difficulty /= reviews.length;
+    data.Difficulty = Math.round((data.Difficulty + Number.EPSILON) * 100) / 100
     data.Interest /= reviews.length;
+    data.Interest = Math.round((data.Interest + Number.EPSILON) * 100) / 100
     data.MandatoryLecture = numLectureYes > 0 ? "Yes" : "No";
     data.MandatoryTextbook = numTextBookYes > 0 ? "Yes" : "No";
     setAggregatedData(data);
