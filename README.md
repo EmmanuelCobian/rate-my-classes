@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, ```bash run npm install ```to get the necessary packages
+First, ```run npm install```to get the necessary packages
 
 Then, run the development server:
 
@@ -16,4 +16,4 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Finally, open a separate terminal and cd into the backend folder. Run node main.js to get the backend runnning
+Finally, open a separate terminal and cd into the backend folder. Run ```node main.js``` to get the backend runnning
