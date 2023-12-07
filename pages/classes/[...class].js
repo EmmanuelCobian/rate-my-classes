@@ -99,6 +99,8 @@ export default function ClassPage() {
     });
 
     data.OverallRating /= reviews.length;
+    data.OverallRating =
+      Math.round((data.OverallRating + Number.EPSILON) * 100) / 100;
     data.Difficulty /= reviews.length;
     data.Difficulty =
       Math.round((data.Difficulty + Number.EPSILON) * 100) / 100;

@@ -110,6 +110,7 @@ export default function SearchBar() {
     } else {
       setValidInput(false);
     }
+    setUserInput("")
   };
 
   const autoComplete = async (depAndCode) => {
