@@ -25,9 +25,10 @@ const BackgroundContainer = styled.div`
 
 const CenterTextContainer = styled.div`
   width: 2000px;
-  height: 500px;
+  height: 200px;
   padding: 20px;
   margin: 20px;
+  margin-bottom: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
